@@ -183,5 +183,3 @@ function styleFile(filePath) {
 		dataType:'text'
 	})
 }
-
-styleFile("demo.style")
