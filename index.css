@@ -1,3 +1,17 @@
+body {
+    max-width: 800px;
+    margin: 30px auto;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 10px 10px 50px -20px;
+}
+
+html {
+    background-color: lightgray;
+}
+
 p,
 ul {
     font-family: 'Segoe UI', Helvetica, Calibri, sans-serif;
