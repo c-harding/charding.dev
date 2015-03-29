@@ -28,3 +28,12 @@ h3 {
     font-family: 'Segoe UI', Helvetica, Calibri, sans-serif;
     text-decoration: underline;
 }
+
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
