@@ -1,0 +1,80 @@
+article {
+    max-width: 800px;
+    margin: 30px auto;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 10px 10px 50px -20px;
+    position: relative;
+}
+
+html {
+    background-color: lightgray;
+}
+
+article {
+    font-family: 'Segoe UI', Helvetica, Calibri, sans-serif;
+}
+
+code,
+pre {
+    font-family: 'Ubuntu Mono', Monaco, monospace;
+    overflow-x: auto;
+}
+
+h1,
+h3 {
+    font-family: 'Segoe UI', Helvetica, Calibri, sans-serif;
+    text-decoration: underline;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img.me {
+    width: 20%;
+    float: right;
+    border-top-right-radius: 10px;
+    margin: -20px -20px 20px 20px;
+}
+
+#navbar {
+    position: absolute;
+    top: -25px;
+    height: 25px;
+}
+
+#navbar a {
+    background-color: lightgray;
+    border: 1px solid gray;
+    border-bottom: none;
+    display: inline-block;
+    border-radius: 10px 10px 0 0;
+    padding: 2px 10px;
+    height: 25px;
+    box-sizing: border-box;
+    color: black;
+    text-decoration: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+#navbar a.this, #navbar a:hover {
+    background-color: white;
+    text-decoration: none;
+}
+
+#navbar a.this {
+    font-weight: bold;
+}
