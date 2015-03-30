@@ -10,7 +10,7 @@ article {
 }
 
 html {
-    background-color: lightgray;
+    background-color: #009ACD;
 }
 
 article {
@@ -30,7 +30,7 @@ h3 {
 }
 
 a {
-    color: blue;
+    color: darkorange;
     text-decoration: none;
 }
 
@@ -52,7 +52,7 @@ img.me {
 }
 
 #navbar a {
-    background-color: lightgray;
+    background-color: lightblue;
     border: 1px solid gray;
     border-bottom: none;
     display: inline-block;
