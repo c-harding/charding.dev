@@ -49,9 +49,11 @@ img.me {
     position: absolute;
     top: -25px;
     height: 25px;
+    font-size: 0;
 }
 
 #navbar a {
+    font-size: initial;
     background-color: lightblue;
     border: 1px solid gray;
     border-bottom: none;
