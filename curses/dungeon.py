@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 
 #import modules
 import curses, random, sys, time, traceback, os.path, json, math
@@ -701,7 +701,7 @@ levels = [
     Level(  5, 15, 20,{1: 5,5: 3},  3, [ 0, 8]),
     Level( 12, 12, 40,{1: 5,5: 3},  2, [ 8, 8], 1),
     Level( 15, 15, 40,{1: 4,5: 6},  1, [10, 6]),
-    Level( 15, 15, 80,{1: 5,5: 3},  5, [10,10]),
+    Level( 15, 15, 80,{1: 5,5: 3},  5, [10,10], 4),
     Level( 15, 15,100,{10: 1},      1),
     Level( 20, 20,350,{20: 1},       0, [ 4, 4]),
     Level( 15, 15,100,{1:40,2:5,20:1},17)
@@ -776,7 +776,6 @@ try:
             
 except (KeyboardInterrupt):
     map.message("Game quit")
-    #raise
 except (SystemExit):
     try: score()
     except (KeyboardInterrupt):
