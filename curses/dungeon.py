@@ -23,7 +23,9 @@ the keys WASD.
 If and when you die, you will have to enter your name. Hit
 enter afterwards to save your score locally. This will
 create a file `dungeon_scores.json` in your current
-directory. You can view those scores by pressing #."""%VERSION
+directory. You can view those scores by pressing #.
+This game is still in development, and so it may have
+updates available. Press u to check for updates online."""%VERSION
 
 class Level:
     __number = 0
@@ -660,7 +662,12 @@ def check_update():
     new_version = versionline[11:-2].decode('utf8')
     update_code = version_compare(VERSION, new_version)
     if update_code == 1:
-        map.message("Update available. Would you like to update?")
+        map.message("Update available. Would you like to update? y/n")
+        key=screen.getkey().lower()
+        if key == "y" or ord(key) is 10:
+            map.message("Now updating.")
+            update()
+        else: map.message("Update cancelled.")
     elif update_code == 0:
         map.message("You're on the latest version.")
 
@@ -753,8 +760,6 @@ try:
             show_help()
         elif key == "u":
             check_update()
-        elif key == "y":
-            update()
         
         map.draw()
         screen.move(level.height+4,0)
@@ -790,9 +795,9 @@ finally:
     - Scroll to dead 0.1.2
     - Add "can't reach" button: all things are now reachable 0.1.3
     - Add auto-update 0.1.4
+    - Add portals 0.1.4
     
     Todo:
-    - Add portals
     - Increase documentation
     - Localisation
     - Multiple files?
