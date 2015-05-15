@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 #import modules
 import curses, random, sys, time, traceback, os.path, json, math
 from termcolor import colored
+import urllib.request
 
 SCORES_FILE = './dungeon_scores.json'
 HELPTEXT = """Dungeon by Xsanda
@@ -623,8 +624,56 @@ def show_help():
     screen.addstr(0,0,HELPTEXT)
     screen.getkey()
 
-def path():
-    map.message(os.path.realpath(__file__))
+def check_update():
+    def version_compare(old, new):
+        if old == new: return 0
+        O = [int(o) for o in old.split('.')]
+        N = [int(n) for n in new.split('.')]
+        if O[0] < N[0]: return 1
+        elif O[0] > N[0]: return -1
+        else:
+            if len(O) == 1 and len(N) == 1:
+                return 0
+            elif len(O) == 1:
+                O.append(0)
+            elif len(N) == 1:
+                N.append(0)
+
+        if O[1] < N[1]: return 1
+        elif O[1] > N[1]: return -1
+        else:
+            if len(O) == 2 and len(N) == 2:
+                return 0
+            elif len(O) == 2:
+                O.append(0)
+            elif len(N) == 2:
+                N.append(0)
+
+            if O[2] < N[2]: return 1
+            elif O[2] > N[2]: return -1
+            else: return 0
+
+    url = 'http://xsanda.me/curses/dungeon.py'
+    with urllib.request.urlopen(url) as code:
+        shebang = str(code.readline())
+        versionline = code.readline()
+    new_version = versionline[11:-2].decode('utf8')
+    update_code = version_compare(VERSION, new_version)
+    if update_code == 1:
+        map.message("Update available. Would you like to update?")
+    elif update_code == 0:
+        map.message("You're on the latest version.")
+
+def update():
+    url = 'http://xsanda.me/curses/dungeon.py'
+    
+    try:
+        with urllib.request.urlopen(url) as code,\
+             open(os.path.realpath(__file__), "w") as save:
+            save.write(code.read().decode('utf8'))
+    
+    except:
+        map.message("Update error. If this game no longer plays, redownload from 'http://xsanda.me/curses/dungeon.py'.")
 
 #define some levels
 levels = [
@@ -702,8 +751,10 @@ try:
             show_scores()
         elif key == "h":
             show_help()
-        elif key == "p":
-            path()
+        elif key == "u":
+            check_update()
+        elif key == "y":
+            update()
         
         map.draw()
         screen.move(level.height+4,0)
@@ -738,12 +789,12 @@ finally:
     - Add big scrolling maps 0.1.2
     - Scroll to dead 0.1.2
     - Add "can't reach" button: all things are now reachable 0.1.3
+    - Add auto-update 0.1.4
     
     Todo:
     - Add portals
     - Increase documentation
     - Localisation
-    - Add auto-update
     - Multiple files?
     - Score module?
 """
