@@ -11,21 +11,24 @@ HELPTEXT = """Dungeon by Xsanda
 Thank you for downloading Dungeon by Xsanda, version %s
 
 How to play:
+
 Use the arrow keys to control your piece, the brackets ().
 The aim is to collect all the coins on the map, in order to
 advance to the next level. Do not move into any blockers ><
-or monsters M!, as these will kill you. For the earlier
-levels, moving off the edge of the map will loop around to
-the other side. However, as the maps get harder the map
-will not all fit on one screen, so the map will pan as you
-approach the edge of the screen. You can manually pan with
-the keys WASD.
+or monsters M!, as these will kill you. If you see a pink
+>1, this is a portal, and it will teleport you to the other
+portal with the same number. For the earlier levels, moving
+off the edge of the map will loop around to the other side.
+However, as the maps get harder the map will not all fit on
+one screen, so the map will pan as you approach the edge of
+the screen. You can manually pan with the keys WASD.
+
 If and when you die, you will have to enter your name. Hit
 enter afterwards to save your score locally. This will
 create a file `dungeon_scores.json` in your current
-directory. You can view those scores by pressing #.
-This game is still in development, and so it may have
-updates available. Press u to check for updates online."""%VERSION
+directory. You can view those scores by pressing #. This
+game is still in development, and so it may have updates
+available. Press u to check for updates online."""%VERSION
 
 class Level:
     __number = 0
@@ -407,7 +410,7 @@ def add_coin(num=1):
         win = True
 
 def move_mob(old_me, new_me):
-    """Move mobs by one click towards player's former location."""
+    """Move mobs by one click towards player's location."""
     
     mob_locs = [False]*level.mobs
     lose = False
@@ -662,7 +665,7 @@ def check_update():
     new_version = versionline[11:-2].decode('utf8')
     update_code = version_compare(VERSION, new_version)
     if update_code == 1:
-        map.message("Update available. Would you like to update? y/n")
+        map.message("Update available: v%s (current version %s). Would you like to update? y/n" % (new_version, VERSION))
         key=screen.getkey().lower()
         if key == "y" or ord(key) is 10:
             map.message("Now updating.")
