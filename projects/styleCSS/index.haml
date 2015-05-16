@@ -1,0 +1,143 @@
+= content_for :title do
+	Demo of styleCSS
+= content_for :head do
+	%script{src: "jquery-min.js"}
+	%script{src: "styleCSS.min.js"}
+  :javascript
+  	styleFile("demo.style")
+
+:preserve
+	<h1>styleCSS</h1>
+            <p>styleCSS is a dynamic runtime CSS processor, with support for easier coding, variables and functions.</p>
+            <p>Import a file with <code><span class="function">styleFile</span>(<span class="string">"demo.style"</span>);</code>. <code><span class="string">"demo.style"</span></code> can be replaced with any file path you like, providing it is on the same domain and port as your webpage. You can import as many <code><span class="function">styleFile</span>(<span class="var">filePath</span>)</code>s as you need, and the ones you import last will take priority. Please note you will need jQuery, which can be downloaded from below. To include it, along with this file, simply add the following to your page's <code><span class="rule">&lt;head&gt;</span></code> tag:</p>
+	<pre>
+	<span class="rule">&lt;script</span> <span class="selector">src=</span><span class="string">"jquery-min.js"</span><span class="rule">&gt;&lt;/script&gt;</span>
+	<span class="rule">&lt;script</span> <span class="selector">src=</span><span class="string">"styleCSS.min.js"</span><span class="rule">&gt;&lt;/script&gt;</span></pre>
+				<p>The file acts the same as any normal CSS, except for some key improvements. First of all, semi-colons are optional! This means that this is allowed:</p>
+	<pre><span class="selector">table</span> {
+		<span class="rule">background-color</span>: <span class="maths">#F60</span>
+		<span class="rule">border</span>: <span class="maths">1px</span> <span class="string">solid</span> <span class="maths">#39F</span>
+		<span class="rule">width</span>: <span class="maths">100%</span>
+	}</pre>
+				<p>However, if you want to have a multi-line property, then either put the split directly after a comma <code>,</code> or put a backslash <code>\</code> at the end of the line. For example,</p>
+	<pre>
+		<span class="rule">background</span>: <span class="function">url</span>(<span class="string">sheep.png</span>) <span class="string">center bottom no-repeat</span>, 
+			<span class="function">url</span>(<span class="string">betweengrassandsky.png</span>)\
+			<span class="string">left top no-repeat</span>
+	</pre>
+				<p>Another very useful feature is variables. There are two types, <code><span class="function">$rules</span></code> and <code><span class="function">£rulesets</span></code>.  <code><span class="function">$rules</span></code> are one line properties, and <code><span class="function">£rulesets</span></code> are sets of rules. They are used like this:</p>
+	<pre><span class="selector">@vars</span> {
+		<span class="function">$font-family1</span>: <span class="string">'Segoe UI', Helvetica, Calibri, sans-serif</span>
+		<span class="function">$font-family2</span>: <span class="string">'Ubuntu Mono', Monaco, monospace</span>
+		<span class="function">£text</span>: {
+			<span class="rule">text-decoration</span>: <span class="string">underline</span>
+		}
+	}
+
+	<span class="selector">p, a</span> {
+		<span class="rule">font-family</span>: <span class="function">$font-family1</span>
+	}
+
+	<span class="selector">code, pre</span> {
+		<span class="rule">font-family</span>: <span class="function">$font-family2</span>
+		<span class="rule">overflow-x</span>: <span class="string">auto</span>
+	}
+
+	<span class="selector">h1, h3</span> {
+		<span class="rule">font-family</span>: <span class="function">$font-family1</span>
+		<span class="function">£text</span>
+	}</pre>
+				<p>Even more useful that variables, however, are functions. They are defined in the <code><span class="selector">@vars</span> {<span class="string">&hellip;</span>}</code> block, and are dynamic versions of variables. They are defined like this:</p>
+	<pre><span class="function">$$text</span>(): {
+		<span class="function">£return</span>: {
+			<span class="rule">font-family</span>: <span class="function">$$font-family</span>(<span class="string">sans</span>)
+			<span class="rule">text-decoration</span>: <span class="string">underline</span>
+			<span class="rule">font-style</span>: <span class="string">italic</span>
+		}
+	}</pre>			
+				<p>The example above shows a very simple code which takes no arguments and just returns a block of rules, in the same way as a <code><span class="function">£ruleset</span></code>. However, the <code><span class="rule">font-family</span></code> rule takes another function as the property, which does take an argument. Although it has no quotes (they are not needed for the argument), <code><span class="string">sans</span></code> is a <code><span class="string">string</span></code>. Both <code><span class="string">strings</span></code> and <code><span class="maths">numbers</span></code> can be passed as the argument. Inside them, they run <em>styleScript</em>, a very simple language designed just for this. It has three concepts, the <code><span class="function">$input</span></code>, which is the argument, <code><span class="function">if</span></code> statements, and <code><span class="function">return</span></code>. There are two types of <code><span class="function">return</span></code>, <code><span class="function">£return</span></code> and <code><span class="function">$return</span></code>. These act as normal variables, and are the output of the function. The <code><span class="function">if</span></code> statement doesn't need brackets, and can test if the argument is equal to a string or another number, or if it is greater/less than (or equal to) a number. This is shown in the example below.</p>
+	<pre><span class="function">$$font-family</span>(): {
+		<span class="function">if $input</span><span class="maths">=</span><span class="string">"mono"</span> {
+			<span class="function">$return</span>: <span class="string">'Ubuntu Mono', Monaco, </span><span class="function">$input</span><span class="string">space</span>
+		}
+		<span class="function">else if $input</span><span class="maths">=</span><span class="string">"sans"</span> {
+			<span class="function">$return</span>: <span class="string">'Segoe UI', Helvetica, Calibri, </span><span class="function">$input</span><span class="string">-serif</span>
+		}
+	
+		<span class="function">else</span> {
+			<span class="function">$return</span>: <span class="string">serif</span>
+		}
+	}</pre>
+				<p>My name's Xsanda, and I'd love it if you were to mention it if you use this tool! I don't have my own domain, though :( 
+					<form action="mailto:xsanda@me.com"><button type="submit">Email me here</button></p>
+				<h3>Download</h3>
+				<ul>
+					<li><a href="styleCSS.min.js">Minified version</a></li>
+					<li><a href="styleCSS.js">Expanded version (for developers)</a></li>
+					<li><a href="demo.style">Sample file</a></li>
+					<li><a href="jquery-min.js">jQuery</a></li>
+				</ul>
+				<h3>Example</h3>
+	<pre><span class="selector">@vars</span> {
+		<span class="function">$$font-family</span>(): {
+			<span class="function">if $input</span><span class="maths">=</span><span class="string">"mono"</span> {
+				<span class="function">$return</span>: <span class="string">'Ubuntu Mono', Monaco, </span><span class="function">$input</span><span class="string">space</span>
+			}
+			<span class="function">else if $input</span><span class="maths">=</span><span class="string">"sans"</span> {
+				<span class="function">$return</span>: <span class="string">'Segoe UI', Helvetica, Calibri, </span><span class="function">$input</span><span class="string">-serif</span>
+			}
+		
+			<span class="function">else</span> {
+				<span class="function">$return</span>: <span class="string">serif</span>
+			}
+		}
+		<span class="function">$$text</span>(): {
+			<span class="function">£return</span>: {
+				<span class="rule">font-family</span>: <span class="function">$$font-family</span>(<span class="string">sans</span>)
+				<span class="rule">text-decoration</span>: <span class="string">underline</span>
+				<span class="rule">font-style</span>: <span class="string">italic</span>
+			}
+		}
+	}
+
+	<span class="selector">p, a</span> {
+		<span class="rule">font-family</span>: <span class="function">$$font-family</span>(<span class="string">sans</span>)
+	}
+
+	<span class="selector">code, pre</span> {
+		<span class="rule">font-family</span>: <span class="function">$$font-family</span>(<span class="string">mono</span>)
+		<span class="rule">overflow-x</span>: <span class="string">auto</span>
+	}
+
+	<span class="selector">h1, h3</span> {
+		<span class="function">$$text</span>()
+	}
+
+	<span class="selector">span.string</span> {
+		<span class="rule">color</span>: <span class="string">red</span>
+	}
+
+	<span class="selector">span.maths</span> {
+		<span class="rule">color</span>: <span class="string">blue</span>
+	}
+
+	<span class="selector">span.var</span> {
+		<span class="rule">color</span>: <span class="string">purple</span>
+	}
+
+	<span class="selector">span.rule</span> {
+		<span class="rule">color</span>: <span class="string">fuchsia</span>
+	}
+
+	<span class="selector">span.function</span> {
+		<span class="rule">color</span>: <span class="string">teal</span>
+	}
+
+	<span class="selector">span.selector</span> {
+		<span class="rule">color</span>: <span class="string">maroon</span>
+	}</pre>
+
+            <div id="navbar">
+                <a href="/">Home</a>
+                <a href="/projects/">Projects</a>
+            </div>

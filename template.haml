@@ -1,0 +1,15 @@
+!!! 5
+%html
+	%head
+		%title= yield :title
+		%link{href: "/css.css"}
+		%meta{name: "viewport", content: "width=400; initial-scale=1; target-densityDpi=device-dpi"}
+		= yield :head
+	
+	%body
+		%article
+			=yield
+			
+			#navbar
+				%a{href: "/", class: [("this" if "/#{f}" == "/")]} Home
+				%a{href: "/projects/", class: [("this" if "/#{f}" == "/projects/")]} Projects
