@@ -32,7 +32,9 @@ regions = Regions.new
     end
     
     File.open("#{f}index.html", 'w') {|file| file.write rendered}
+
+    puts "File '#{f}' written successfully"
   rescue
-    
+    puts "File '#{f}index.haml' not read."
   end
 end
