@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 
 #import modules
 import curses, random, sys, time, traceback, os.path, json, math
@@ -361,6 +361,8 @@ def move(d):
     change = 1 - 2*(d//2)
     direction = d % 2
     
+    map.scroll_me() #prevent "out of sight, out of mind" hack
+    
     new_me = map.me[:]
     new_me[direction] = (new_me[direction] + change) % (level.height, level.width)[direction]
     if map[new_me].function is "death":
@@ -395,9 +397,9 @@ def move(d):
     old_me, map.me = map.me[:], new_me[:]
     map[map.me] = Me()
     
-    move_mob(old_me, map.me)
-    
     map.scroll_me()
+    
+    move_mob(old_me, map.me)
     
 def add_coin(num=1):
     global bank
@@ -658,7 +660,7 @@ def check_update():
             elif O[2] > N[2]: return -1
             else: return 0
 
-    url = 'http://xsanda.me/curses/dungeon.py'
+    url = 'http://xsanda.me/projects/dungeon/dungeon.py'
     with urllib.request.urlopen(url) as code:
         shebang = str(code.readline())
         versionline = code.readline()
@@ -675,7 +677,7 @@ def check_update():
         map.message("You're on the latest version.")
 
 def update():
-    url = 'http://xsanda.me/curses/dungeon.py'
+    url = 'http://xsanda.me/projects/dungeon/dungeon.py'
     
     try:
         with urllib.request.urlopen(url) as code,\
@@ -746,7 +748,7 @@ try:
         elif key == "q":
             raise KeyboardInterrupt()
         elif key == "t":
-            map.message(str(grid))
+            map.message(str(level.coinscore)+"/"+str(level.sum_coins))
         
         elif key == "w":
             map.scroll(2)
@@ -798,8 +800,10 @@ finally:
     - Add "can't reach" button: all things are now reachable 0.1.3
     - Add auto-update 0.1.4
     - Add portals 0.1.4
+    - New URL 0.1.6
     
     Todo:
+    - Retry in game: full menu
     - Increase documentation
     - Localisation
     - Multiple files?
