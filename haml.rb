@@ -23,7 +23,7 @@ regions = Regions.new
   "projects/CSSpro/",
   "projects/dungeon/",
   "projects/jsCSS/",
-  "projects/jsCSS/"
+  "projects/styleCSS/"
 ].each do |f|
   begin
     file = Haml::Engine.new(File.read("#{f}index.haml")).render(regions)
@@ -36,5 +36,6 @@ regions = Regions.new
     puts "File '#{f}' written successfully"
   rescue
     puts "File '#{f}index.haml' not read."
+    #puts $!, $@
   end
 end
