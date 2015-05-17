@@ -80,3 +80,7 @@ img.me {
 #navbar a.this {
     font-weight: bold;
 }
+
+.grey {
+    color: gray;
+}
