@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-VERSION = "0.1.6"
+VERSION = "0.2.0"
 
 #import modules
-import curses, random, sys, time, traceback, os.path, json, math
+import curses, sys, time, traceback, os.path, json, math
 from termcolor import colored
+from random import random, randint
 import urllib.request
 
-SCORES_FILE = './dungeon_scores.json'
+SCORES_FILE = os.path.join(os.path.dirname(__file__), 'dungeon_scores.json')
 HELPTEXT = """Dungeon by Xsanda
 Thank you for downloading Dungeon by Xsanda, version %s
 
@@ -32,10 +33,10 @@ available. Press u to check for updates online."""%VERSION
 
 class Level:
     __number = 0
-    coinscore = 0
     
     def __init__(self, height, width = False,
-                 mines = 0, coins = {1:1, 5:0}, mobs = 0, display = [0, 0], portals = 0):
+                 mines = 0, coins = {1:1, 5:0}, mobs = 0, display = [0, 0],
+                 portals = 0):
         self.height = height
         self.width = width or height
         self.mines = mines
@@ -46,7 +47,191 @@ class Level:
         self.display = display
         self.portals = portals
         
+        self.coinscore = 0
+        
         Level.__number+=1
+    
+    def play(self):
+        map = self.game.map = self.map = Map(self)
+        screen.nodelay(True)
+        while(screen.getch() is not -1): pass #discard intermediate keypresses
+        screen.nodelay(False)
+        
+        self.win = False
+        
+        map.draw()
+    
+        while True:
+            key = screen.getkey().lower()
+            if key == "\x1b":
+                screen.nodelay(True)
+                nextkey = screen.getch()
+                thirdkey = screen.getch()
+                screen.nodelay(False)
+                if nextkey is -1:
+                    raise KeyboardInterrupt()
+                elif nextkey is 91: # arrow key
+                    if thirdkey is 66: #down
+                        self.move(0)
+                    elif thirdkey is 67: #right
+                        self.move(1)
+                    elif thirdkey is 65: #up
+                        self.move(2)
+                    elif thirdkey is 68: #left
+                        self.move(3)
+        
+            elif key == "q":
+                raise KeyboardInterrupt()
+            elif key == "t":
+                map.message(str(level.coinscore)+"/"+str(level.sum_coins))
+        
+            elif key == "w":
+                map.scroll(2)
+            elif key == "a":
+                map.scroll(3)
+            elif key == "s":
+                map.scroll(0)
+            elif key == "d":
+                map.scroll(1)
+        
+            elif key == "#":
+                show_scores()
+            elif key == "h":
+                show_help()
+            elif key == "u":
+                check_update()
+        
+            map.draw()
+            screen.move(self.height+4,0)
+            screen.refresh()
+
+            if self.win is True:
+                time.sleep(0.5)
+                break
+    
+    def move(self, d):
+        """Move player to neighbouring spot.
+    
+        d = 0 => down
+        d = 1 => right
+        d = 2 => up
+        d = 3 => left
+        """
+        
+        map = self.map
+        
+        change = 1 - 2*(d//2)
+        direction = d % 2
+    
+        map.scroll_me() #prevent "out of sight, out of mind" hack
+    
+        new_me = map.me[:]
+        new_me[direction] = (new_me[direction] + change) % (self.height, self.width)[direction]
+        if map[new_me].function is "death":
+            map[new_me].got_me()
+            map[map.me] = Blank()
+            map.me = new_me[:]
+            map.scroll_me()
+            map.draw()
+            map.message("You lose")
+            exit()
+    
+        elif map[new_me].name is "portal":
+            new_me = map[new_me].target
+            newnewme = new_me[:]
+            newnewme[direction] = (newnewme[direction] + change) % (self.height, self.width)[direction]
+            if map[newnewme].function in {"death", "move"}:
+                d = -1
+                while map[newnewme].function in {"death", "move"}:
+                    d += 1
+                    change = 1 - 2*(d//2)
+                    direction = d % 2
+                    newnewme = new_me[:]
+                    if d is 4: break
+                    newnewme[direction] = (newnewme[direction] + change) % (self.height, self.width)[direction]
+        
+            new_me = newnewme
+    
+        if map[new_me].name is "coin":
+            self.add_coin(map[new_me].value)
+    
+        map[map.me] = Blank()
+        old_me, map.me = map.me[:], new_me[:]
+        map[map.me] = Me()
+    
+        self.move_mob(old_me, map.me)
+    
+    def move_mob(self, old_me, new_me):
+        """Move mobs by one click towards player's location."""
+        
+        map = self.map
+        
+        mob_locs = [False]*self.mobs
+        lose = False
+        for y, n in map:
+            for x, item in map.cells(y):
+                if item.name is "mob":
+                    mob_locs[item.id] = (y, x)
+    
+        for mob in mob_locs:
+            if mob is False: continue
+            rand = random()
+            if rand < 0.6:
+                me = old_me
+            elif rand < 0.9:
+                me = new_me
+            else:
+                me = [
+                    randint(0,self.height-1),
+                    randint(0,self.width-1)
+                ]
+            midheight = int(self.height/2)
+            midwidth = int(self.width/2)
+            dy = (me[0]-mob[0] + midheight) % self.height - midheight
+            dx = (me[1]-mob[1] + midwidth) % self.width - midwidth
+        
+            if dx is 0 or dy is not 0 and random() < 0.5:
+                if dy > 0:
+                    new_pos = ((mob[0]+1)%self.height, mob[1])
+                else: new_pos = ((mob[0]-1)%self.height, mob[1])
+            else:
+                if dx > 0:
+                    new_pos = (mob[0], (mob[1]+1)%self.width)
+                else: new_pos = (mob[0], (mob[1]-1)%self.width)
+        
+            if map[new_pos].name is "coin":
+                self.sum_coins -= map[new_pos].value
+            elif map[new_pos].name is "me":
+                lose = True
+            self.add_coin(0)
+        
+            map[new_pos] = map[mob]
+            if lose: map[new_pos].got_me()
+            map[mob] = Blank()
+        
+            map.draw()
+        
+            if lose:
+                map.message("You lose")
+                exit()
+    
+    def draw(self):
+        self.map.draw()
+    
+    @property
+    def bank(self):
+        return self.game.bank
+    
+    def add_coin(self,num=1):
+        self.coinscore += num
+        self.game.bank += num
+    
+        if self.coinscore is self.sum_coins:
+            self.message("You win!")
+            self.win = True
+    
+    def message(self, str=""):
+        self.map.message(str)
 
 class Item:
     colour = 0
@@ -160,39 +345,34 @@ class Map:
         
         self.contents = [[Mine() for c in range(self.width)] for r in range(self.height)]
         
-        mover = [random.randint(0,self.height-1), random.randint(0,self.width-1)]
+        mover = [randint(0,self.height-1), randint(0,self.width-1)]
         mines = self.height * self.width
         while mines != level.mines:
-            if random.random() > 0.5:
-                if random.random() > 0.5:
+            if random() > 0.5:
+                if random() > 0.5:
                     mover[0] = (mover[0]+1) % self.height
                 else: mover[0] = (mover[0]-1) % self.height
             else:
-                if random.random() > 0.5:
+                if random() > 0.5:
                     mover[1] = (mover[1]+1) % self.width
                 else: mover[1] = (mover[1]+1) % self.width
             
-            try:
-                if self[mover].type is 1: mines -= 1
-                self[mover] = Blank()
-            except:
-                print(repr([level.height, level.width]))
-                print(repr(mover))
-                time.sleep(5)
+            if self[mover].type is 1: mines -= 1
+            self[mover] = Blank()
         
         for v in level.coins:
             for i in range (level.coins[v]):
                 while True:
-                    y = random.randint(0,self.height-1)
-                    x = random.randint(0,self.width-1)
+                    y = randint(0,self.height-1)
+                    x = randint(0,self.width-1)
                     if not self[y,x]:
                         self[y,x] = Coin(v)
                         break
         
         for i in range(level.mobs):
             while True:
-                y = random.randint(0,self.height-1)
-                x = random.randint(0,self.width-1)
+                y = randint(0,self.height-1)
+                x = randint(0,self.width-1)
                 if not self[y,x]:
                     self[y,x] = Mob(i)
                     break
@@ -201,14 +381,14 @@ class Map:
             first = []
             second = []
             while True:
-                y = random.randint(0,self.height-1)
-                x = random.randint(0,self.width-1)
+                y = randint(0,self.height-1)
+                x = randint(0,self.width-1)
                 if not self[y,x]:
                     first = [y,x]
                     break
             while True:
-                y = random.randint(0,self.height-1)
-                x = random.randint(0,self.width-1)
+                y = randint(0,self.height-1)
+                x = randint(0,self.width-1)
                 if not(self[y,x]) and repr(first) != repr([y,x]):
                     second = [y,x]
                     break
@@ -216,8 +396,8 @@ class Map:
             self[second] = Portal(i, first)
         
         while True:
-            y = random.randint(0,self.height-1)
-            x = random.randint(0,self.width-1)
+            y = randint(0,self.height-1)
+            x = randint(0,self.width-1)
             if not self[y,x]:
                 self.me = me = [y,x]
                 self[me] = Me()
@@ -227,6 +407,7 @@ class Map:
     
     def draw(self):
         level = self.level
+        global game
         
         if curses.isendwin():
             output = lambda str="": print(str, end="")
@@ -253,7 +434,7 @@ class Map:
             output("| ")
             for y,item in self.cells(r): self.display(item)
             if n is 0: outputln("|  $%4i" % level.coinscore)
-            elif n is 1: outputln("|  Σ$%3i" % bank)
+            elif n is 1: outputln("|  Σ$%3i" % level.bank)
             elif n is 2: outputln("|  Press h for help")
             else: outputln("|")
         output("+" + "---"*width + "-+")
@@ -334,139 +515,57 @@ class Map:
                 self.scrollx+=1
                 i-=1
 
-def next_level():
-    """Set up the variables for the level."""
-    
-    if len(levels) is 0:
-        global map
-        map.message("You beat the game!")
-        time.sleep(1)
-        exit()
-    level = levels.pop(0)
-    map = Map(level)
-    screen.nodelay(True)
-    while(screen.getch() is not -1): pass #discard
-    screen.nodelay(False)
-    return level, map
+class Game:
+    #define some levels
+    levels = [
+              #width  #mines          #mobs
+                  #height #coins          #view
+        Level(  2,  2,  0,{1: 1}),
+        Level(  5,  5,  4,{1: 4}),
+        Level(  4,  4,  4,{1: 1}),
+        Level(  5,  5,  4,{1: 4}),
+        Level(  5, 15, 10,{1: 5},       0, [ 0, 8]),
+        Level(  5,  5,  7,{1: 5},       1),
+        Level(  7,  7, 20,{1: 2},       2),
+        Level(  8,  8,  5,{1:10}, portals = 1),
+        Level( 11, 11, 30,{1:12,5: 2},  1, portals = 1),
+        Level(  5, 15, 20,{1: 5,5: 3},  3, [ 0, 8]),
+        Level( 12, 12, 40,{1: 5,5: 3},  2, [ 8, 8], 1),
+        Level( 15, 15, 40,{1: 4,5: 6},  1, [10, 6]),
+        Level( 15, 15, 80,{1: 5,5: 3},  5, [10,10], 4),
+        Level( 15, 15,100,{10: 1},      1),
+        Level( 20, 20,350,{20: 1},       0, [ 4, 4]),
+        Level( 15, 15,100,{1:40,2:5,20:1},17)
+    ]
 
-def move(d):
-    """Move player to neighbouring spot.
+    def next_level(self):
+        """Set up the variables for the level."""
     
-    d = 0 => down
-    d = 1 => right
-    d = 2 => up
-    d = 3 => left
-    """
-    
-    change = 1 - 2*(d//2)
-    direction = d % 2
-    
-    map.scroll_me() #prevent "out of sight, out of mind" hack
-    
-    new_me = map.me[:]
-    new_me[direction] = (new_me[direction] + change) % (level.height, level.width)[direction]
-    if map[new_me].function is "death":
-        map[new_me].got_me()
-        map[map.me] = Blank()
-        map.me = new_me[:]
-        map.scroll_me()
-        map.draw()
-        map.message("You lose")
-        exit()
-    
-    elif map[new_me].name is "portal":
-        new_me = map[new_me].target
-        newnewme = new_me[:]
-        newnewme[direction] = (newnewme[direction] + change) % (level.height, level.width)[direction]
-        if map[newnewme].function in {"death", "move"}:
-            d = -1
-            while map[newnewme].function in {"death", "move"}:
-                d += 1
-                change = 1 - 2*(d//2)
-                direction = d % 2
-                newnewme = new_me[:]
-                if d is 4: break
-                newnewme[direction] = (newnewme[direction] + change) % (level.height, level.width)[direction]
-        
-        new_me = newnewme
-    
-    if map[new_me].name is "coin":
-        add_coin(map[new_me].value)
-    
-    map[map.me] = Blank()
-    old_me, map.me = map.me[:], new_me[:]
-    map[map.me] = Me()
-    
-    map.scroll_me()
-    
-    move_mob(old_me, map.me)
-    
-def add_coin(num=1):
-    global bank
-    level.coinscore += num
-    bank += num
-    
-    if level.coinscore is level.sum_coins:
-        map.message("You win!")
-        global win
-        win = True
-
-def move_mob(old_me, new_me):
-    """Move mobs by one click towards player's location."""
-    
-    mob_locs = [False]*level.mobs
-    lose = False
-    for y, n in map:
-        for x, item in map.cells(y):
-            if item.name is "mob":
-                mob_locs[item.id] = (y, x)
-    
-    for mob in mob_locs:
-        if mob is False: continue
-        rand = random.random()
-        if rand < 0.6:
-            me = old_me
-        elif rand < 0.9:
-            me = new_me
-        else:
-            me = [
-                random.randint(0,level.height-1),
-                random.randint(0,level.width-1)
-            ]
-        midheight = int(level.height/2)
-        midwidth = int(level.width/2)
-        dy = (me[0]-mob[0] + midheight) % level.height - midheight
-        dx = (me[1]-mob[1] + midwidth) % level.width - midwidth
-        
-        if dx is 0 or dy is not 0 and random.random() < 0.5:
-            if dy > 0:
-                new_pos = ((mob[0]+1)%level.height, mob[1])
-            else: new_pos = ((mob[0]-1)%level.height, mob[1])
-        else:
-            if dx > 0:
-                new_pos = (mob[0], (mob[1]+1)%level.width)
-            else: new_pos = (mob[0], (mob[1]-1)%level.width)
-        
-        if map[new_pos].name is "coin":
-            level.sum_coins -= map[new_pos].value
-        elif map[new_pos].name is "me":
-            lose = True
-        add_coin(0)
-        
-        map[new_pos] = map[mob]
-        if lose: map[new_pos].got_me()
-        map[mob] = Blank()
-        
-        map.draw()
-        
-        if lose:
-            map.message("You lose")
+        if len(self.levels) is 0:
+            self.level.message("You beat the game!")
+            time.sleep(1)
             exit()
+        self.level = self.levels.pop(0)
+        self.level.game = game
+        self.level.play()
+    
+    def play(game):
+        init_curses()
+        
+        game.bank = 0
+        
+        while True: game.next_level()
+    
+    def message(self, str=""):
+        self.level.message(str)
+    
+    def draw(self):
+        self.level.draw()
 
 def score():
     """Request a name, and save the score."""
     
-    map.message("Please enter your name")
+    game.message("Please enter your name")
     curses.curs_set(True)
     name = []
     pos = 0
@@ -497,10 +596,10 @@ def score():
             if pos is not 0: pos -= 1
             name.pop(pos)
         
-        screen.move(level.height+4,0)
+        screen.move(game.level.height+4,0)
         screen.clrtoeol()
-        screen.addstr(level.height+4,0, "".join(name), curses.color_pair(3))
-        screen.move(level.height+4,pos)
+        screen.addstr(game.level.height+4,0, "".join(name), curses.color_pair(3))
+        screen.move(game.level.height+4,pos)
         screen.refresh()
     
     name = "".join(name)
@@ -508,13 +607,13 @@ def score():
     scores = get_scores()
     
     if len(scores) is 0:
-        map.message("Welcome to the dungeon, you scored %i" % (bank))
-    elif bank > scores[0]["num"]:
-        map.message("New high score: %i by %s" % (bank, name))
+        game.message("Welcome to the dungeon, you scored %i" % (game.bank))
+    elif game.bank > scores[0]["num"]:
+        game.message("New high score: %i by %s" % (game.bank, name))
     else:
-        map.message("Well done, you scored %i" % (bank))
+        game.message("Well done, you scored %i" % (game.bank))
     
-    scores.append({"name": name, "num": bank})
+    scores.append({"name": name, "num": game.bank})
     scores = sorted(scores, key=lambda score: score["num"], reverse=True)
     
     save_scores(scores)
@@ -687,105 +786,32 @@ def update():
     except:
         map.message("Update error. If this game no longer plays, redownload from 'http://xsanda.me/curses/dungeon.py'.")
 
-#define some levels
-levels = [
-          #width  #mines          #mobs
-              #height #coins          #view
-    Level(  2,  2,  0,{1: 1}),
-    Level(  5,  5,  4,{1: 4}),
-    Level(  4,  4,  4,{1: 1}),
-    Level(  5,  5,  4,{1: 4}),
-    Level(  5, 15, 10,{1: 5},       0, [ 0, 8]),
-    Level(  5,  5,  7,{1: 5},       1),
-    Level(  7,  7, 20,{1: 2},       2),
-    Level(  8,  8,  5,{1:10}, portals = 1),
-    Level( 11, 11, 30,{1:12,5: 2},  1, portals = 1),
-    Level(  5, 15, 20,{1: 5,5: 3},  3, [ 0, 8]),
-    Level( 12, 12, 40,{1: 5,5: 3},  2, [ 8, 8], 1),
-    Level( 15, 15, 40,{1: 4,5: 6},  1, [10, 6]),
-    Level( 15, 15, 80,{1: 5,5: 3},  5, [10,10], 4),
-    Level( 15, 15,100,{10: 1},      1),
-    Level( 20, 20,350,{20: 1},       0, [ 4, 4]),
-    Level( 15, 15,100,{1:40,2:5,20:1},17)
-]
+def init_curses():
+    global screen
+    screen = curses.initscr()
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_RED, 0)
+    curses.init_pair(2, curses.COLOR_YELLOW, 0)
+    curses.init_pair(3, curses.COLOR_CYAN, 0)
+    curses.init_pair(4, curses.COLOR_MAGENTA, 0)
+    curses.noecho()
+    curses.cbreak()
+    curses.curs_set(False)
 
-screen = curses.initscr()
-curses.start_color()
-curses.init_pair(1, curses.COLOR_RED, 0)
-curses.init_pair(2, curses.COLOR_YELLOW, 0)
-curses.init_pair(3, curses.COLOR_CYAN, 0)
-curses.init_pair(4, curses.COLOR_MAGENTA, 0)
-curses.noecho()
-curses.cbreak()
-curses.curs_set(False)
-
-level, map = next_level()
-bank = 0
-win = False
-
-map.draw()
-
+game = Game()
 try:
-    while True:
-        key=screen.getkey().lower()
-        if key == "\x1b":
-            screen.nodelay(True)
-            nextkey = screen.getch()
-            thirdkey = screen.getch()
-            screen.nodelay(False)
-            if nextkey is -1:
-                raise KeyboardInterrupt()
-            elif nextkey is 91: # arrow key
-                if thirdkey is 66: #down
-                    move(0)
-                elif thirdkey is 67: #right
-                    move(1)
-                elif thirdkey is 65: #up
-                    move(2)
-                elif thirdkey is 68: #left
-                    move(3)
-        
-        elif key == "q":
-            raise KeyboardInterrupt()
-        elif key == "t":
-            map.message(str(level.coinscore)+"/"+str(level.sum_coins))
-        
-        elif key == "w":
-            map.scroll(2)
-        elif key == "a":
-            map.scroll(3)
-        elif key == "s":
-            map.scroll(0)
-        elif key == "d":
-            map.scroll(1)
-        
-        elif key == "#":
-            show_scores()
-        elif key == "h":
-            show_help()
-        elif key == "u":
-            check_update()
-        
-        map.draw()
-        screen.move(level.height+4,0)
-        screen.refresh()
-
-        if win is True:
-            time.sleep(0.5)
-            level, map = next_level()
-            map.draw()
-            win = False
-            
+    game.play()
 except (KeyboardInterrupt):
-    map.message("Game quit")
+    game.message("Game quit")
 except (SystemExit):
     try: score()
     except (KeyboardInterrupt):
-        map.message("You died")
+        game.message("You died")
 finally:
     curses.endwin()
-    map.draw()
+    game.draw()
 
+# CHANGELOG
 """ Done:
     - Add highscores 0.1.0
     - Add help, with version 0.1.0
@@ -801,11 +827,12 @@ finally:
     - Add auto-update 0.1.4
     - Add portals 0.1.4
     - New URL 0.1.6
+    - Game object 0.2.0
     
     Todo:
     - Retry in game: full menu
     - Increase documentation
     - Localisation
     - Multiple files?
-    - Score module?
+    - Score object
 """
