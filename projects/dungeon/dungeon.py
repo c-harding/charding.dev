@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 #import modules
 import curses, sys, time, traceback, os.path, json, math
@@ -160,6 +160,8 @@ class Level:
         map[map.me] = Me()
     
         self.move_mob(old_me, map.me)
+        
+        map.scroll_me()
     
     def move_mob(self, old_me, new_me):
         """Move mobs by one click towards player's location."""
@@ -201,6 +203,9 @@ class Level:
         
             if map[new_pos].name is "coin":
                 self.sum_coins -= map[new_pos].value
+            elif map[new_pos].name is "portal":
+                map[mob] = Blank()
+                map[map[new_pos].target] = Blank()
             elif map[new_pos].name is "me":
                 lose = True
             self.add_coin(0)
@@ -293,9 +298,6 @@ class Portal(Item):
     def __init__(self, id = 0, target = [0,0]):
         self.id = id + 1
         self.target = target
-    
-    def __del__(self):
-        map[self.target] = Blank()
     
     @property
     def disp(self):
