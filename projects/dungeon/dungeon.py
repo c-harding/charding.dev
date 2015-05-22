@@ -825,14 +825,14 @@ def check_update():
     new_version = versionline[11:-2].decode('utf8')
     update_code = version_compare(VERSION, new_version)
     if update_code == 1:
-        map.message("Update available: v%s (current version %s). Would you like to update? y/n" % (new_version, VERSION))
+        game.message("Update available: v%s (current version %s). Would you like to update? y/n" % (new_version, VERSION))
         key=screen.getkey().lower()
         if key == "y" or ord(key) is 10:
-            map.message("Now updating.")
+            game.message("Now updating.")
             update()
-        else: map.message("Update cancelled.")
+        else: game.message("Update cancelled.")
     elif update_code == 0:
-        map.message("You're on the latest version.")
+        game.message("You're on the latest version.")
 
 def update():
     url = 'http://xsanda.me/projects/dungeon/dungeon.py'
@@ -843,7 +843,7 @@ def update():
             save.write(code.read().decode('utf8'))
     
     except:
-        map.message("Update error. If this game no longer plays, redownload from 'http://xsanda.me/curses/dungeon.py'.")
+        game.message("Update error. If this game no longer plays, redownload from '%s'." % url)
 
 def init_curses():
     global screen
