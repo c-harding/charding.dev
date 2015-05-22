@@ -22,7 +22,9 @@ portal with the same number. For the earlier levels, moving
 off the edge of the map will loop around to the other side.
 However, as the maps get harder the map will not all fit on
 one screen, so the map will pan as you approach the edge of
-the screen. You can manually pan with the keys WASD.
+the screen. You can manually pan with the keys WASD. As the
+game advances, you can also collect lives, to protect you
+against the perils of the dungeon.
 
 If and when you die, you will have to enter your name. Hit
 enter afterwards to save your score locally. This will
@@ -36,7 +38,7 @@ class Level:
     
     def __init__(self, height, width = False,
                  mines = 0, coins = {1:1, 5:0}, mobs = 0, display = [0, 0],
-                 portals = 0):
+                 portals = 0, life = 0):
         self.height = height
         self.width = width or height
         self.mines = mines
@@ -46,6 +48,7 @@ class Level:
         self.number = Level.__number
         self.display = display
         self.portals = portals
+        self.life = life
         
         self.coinscore = 0
         
@@ -129,12 +132,11 @@ class Level:
         new_me[direction] = (new_me[direction] + change) % (self.height, self.width)[direction]
         if map[new_me].function is "death":
             map[new_me].got_me()
+            me = map[map.me]
             map[map.me] = Blank()
             map.me = new_me[:]
             map.scroll_me()
-            map.draw()
-            map.message("You lose")
-            exit()
+            self.lose_life(me)
     
         elif map[new_me].name is "portal":
             new_me = map[new_me].target
@@ -154,6 +156,9 @@ class Level:
     
         if map[new_me].name is "coin":
             self.add_coin(map[new_me].value)
+        
+        elif map[new_me].name is "life":
+            self.add_life(map[new_me].value)
     
         map[map.me] = Blank()
         old_me, map.me = map.me[:], new_me[:]
@@ -207,6 +212,7 @@ class Level:
                 map[mob] = Blank()
                 map[map[new_pos].target] = Blank()
             elif map[new_pos].name is "me":
+                me = map[new_pos]
                 lose = True
             self.add_coin(0)
         
@@ -216,9 +222,7 @@ class Level:
         
             map.draw()
         
-            if lose:
-                map.message("You lose")
-                exit()
+            if lose: self.lose_life(me)
     
     def draw(self):
         self.map.draw()
@@ -227,6 +231,10 @@ class Level:
     def bank(self):
         return self.game.bank
     
+    @property
+    def lives(self):
+        return self.game.lives
+    
     def add_coin(self,num=1):
         self.coinscore += num
         self.game.bank += num
@@ -234,6 +242,28 @@ class Level:
         if self.coinscore is self.sum_coins:
             self.message("You win!")
             self.win = True
+    
+    def add_life(self,num=1):
+        self.game.lives += num
+        return self.game.lives
+    
+    def lose_life(self, me, num=1):
+        map = self.map
+        
+        self.game.lives -= num
+        if self.game.lives is 0:
+            map.message("You lose")
+            exit()
+        else:
+            map.message("You lose a life")
+            time.sleep(1)
+            
+            screen.nodelay(True)
+            while(screen.getch() is not -1): pass #discard intermediate keypresses
+            screen.nodelay(False)
+            
+            map[map.me] = me
+            map.message()
     
     def message(self, str=""):
         self.map.message(str)
@@ -265,15 +295,6 @@ class Me(Item):
     type = 2
     name = "me"
     function = "player"
-class Mob(Mine):
-    disp = "M! "
-    colour = 1
-    type = 5
-    name = "mob"
-    id = 0
-    
-    def __init__(self, id = 0):
-        self.id = id
 class Coin(Item):
     disp = "$$ "
     colour = 2
@@ -302,6 +323,29 @@ class Portal(Item):
     @property
     def disp(self):
         return ">%-2i" % self.id
+class Mob(Mine):
+    disp = "M! "
+    colour = 1
+    type = 5
+    name = "mob"
+    id = 0
+    
+    def __init__(self, id = 0):
+        self.id = id
+class Life(Item):
+    disp = "+1 "
+    colour = 5
+    type = 6
+    name = "life"
+    value = 1
+    function = "collect"
+    
+    def __init__(self, value = 1):
+        self.value = value
+    
+    @property
+    def disp(self):
+        return "+%-2i" % self.value
 
 class Map:
     height = 2
@@ -379,6 +423,14 @@ class Map:
                     self[y,x] = Mob(i)
                     break
         
+        for i in range(level.life):
+            while True:
+                y = randint(0,self.height-1)
+                x = randint(0,self.width-1)
+                if not self[y,x]:
+                    self[y,x] = Life()
+                    break
+        
         for i in range(level.portals):
             first = []
             second = []
@@ -437,7 +489,10 @@ class Map:
             for y,item in self.cells(r): self.display(item)
             if n is 0: outputln("|  $%4i" % level.coinscore)
             elif n is 1: outputln("|  Σ$%3i" % level.bank)
-            elif n is 2: outputln("|  Press h for help")
+            elif level.lives > 1 and n is 2:
+                outputln("|  ♡ %3i" % level.lives)
+            elif (level.lives > 1 and n is 3) or n is 2:
+                outputln("|  Press h for help")
             else: outputln("|")
         output("+" + "---"*width + "-+")
         if self.height is 2:
@@ -526,17 +581,18 @@ class Game:
         Level(  5,  5,  4,{1: 4}),
         Level(  4,  4,  4,{1: 1}),
         Level(  5,  5,  4,{1: 4}),
+        Level(  6,  6,  6,{1: 4}, life = 1),
         Level(  5, 15, 10,{1: 5},       0, [ 0, 8]),
         Level(  5,  5,  7,{1: 5},       1),
         Level(  7,  7, 20,{1: 2},       2),
         Level(  8,  8,  5,{1:10}, portals = 1),
         Level( 11, 11, 30,{1:12,5: 2},  1, portals = 1),
-        Level(  5, 15, 20,{1: 5,5: 3},  3, [ 0, 8]),
+        Level(  5, 15, 20,{1: 5,5: 3},  3, [ 0, 8], life = 1),
         Level( 12, 12, 40,{1: 5,5: 3},  2, [ 8, 8], 1),
         Level( 15, 15, 40,{1: 4,5: 6},  1, [10, 6]),
         Level( 15, 15, 80,{1: 5,5: 3},  5, [10,10], 4),
-        Level( 15, 15,100,{10: 1},      1),
-        Level( 20, 20,350,{20: 1},       0, [ 4, 4]),
+        Level( 15, 15,150,{10: 1},      1),
+        Level( 20, 20,350,{20: 1},       0, [ 4, 4], life = 2),
         Level( 15, 15,100,{1:40,2:5,20:1},17)
     ]
 
@@ -555,6 +611,7 @@ class Game:
         init_curses()
         
         game.bank = 0
+        game.lives = 1
         
         while True: game.next_level()
     
@@ -796,6 +853,7 @@ def init_curses():
     curses.init_pair(2, curses.COLOR_YELLOW, 0)
     curses.init_pair(3, curses.COLOR_CYAN, 0)
     curses.init_pair(4, curses.COLOR_MAGENTA, 0)
+    curses.init_pair(5, curses.COLOR_GREEN, 0)
     curses.noecho()
     curses.cbreak()
     curses.curs_set(False)
@@ -830,6 +888,7 @@ finally:
     - Add portals 0.1.4
     - New URL 0.1.6
     - Game object 0.2.0
+    - Lives 0.2.1
     
     Todo:
     - Retry in game: full menu
