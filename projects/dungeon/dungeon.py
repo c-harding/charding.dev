@@ -11,7 +11,7 @@ if sys.version_info[0] < 3:
 
 import urllib.request
 
-p = eval("print") # otherwise print with args is a syntax error
+p = eval("print") # otherwise print with args is a syntax error in python2
 
 url = 'http://xsanda.me/projects/dungeon/app'
 files = [
@@ -51,6 +51,7 @@ def update():
         file = os.path.join(directory, "launcher.py")
         os.chmod(file, os.stat(file).st_mode | stat.S_IEXEC)
         
+        p("\033[?25h", end="")
     except KeyboardInterrupt:
         p("\033[?25h", end="")
     except:
