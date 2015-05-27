@@ -6,7 +6,7 @@ import os, stat
 import sys, os.path
 
 if sys.version_info[0] < 3:
-    print('This version of python is too old to run Dungeon. Please run the installer with python3 or newer.')
+    print('This version of python is too old to run Dungeon.\nPlease run the installer with python 3 or newer.\nIt may already be installed,\ntry running `python3 path/to/this/file.py`.')
     exit()
 
 import urllib.request
