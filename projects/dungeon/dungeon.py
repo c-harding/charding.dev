@@ -51,6 +51,12 @@ def update():
         file = os.path.join(directory, "launcher.py")
         os.chmod(file, os.stat(file).st_mode | stat.S_IEXEC)
         
+        if not os.path.exists(os.path.join(os.path.dirname(__file__), "dungeon_scores.json")):
+            os.rename(
+                      os.path.join(os.path.dirname(__file__), "dungeon_scores.json"),
+                      os.path.join(os.path.dirname(__file__), "dungeon_game/scores.json")
+                     )
+        
         p("\033[?25h", end="")
     except KeyboardInterrupt:
         p("\033[?25h", end="")
