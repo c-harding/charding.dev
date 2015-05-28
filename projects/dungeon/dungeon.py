@@ -40,12 +40,12 @@ def update():
                 save.write(code.read().decode('utf8'))
     
         p("\033[1F    Completing update: file " + str(fileNo+1) + "/" + str(len(files)+1))
-        os.remove(os.path.join(os.path.dirname(__file__), "dungeon.py"))
+        os.remove(__file__)
         os.symlink(
                    os.path.join(os.path.dirname(__file__), "dungeon_game/launcher.py"),
-                   os.path.join(os.path.dirname(__file__), "dungeon.py")
+                   __file__
                   )
-        file = os.path.join(os.path.dirname(__file__), "dungeon.py")
+        file = __file__
         os.chmod(file, os.stat(file).st_mode | stat.S_IEXEC)
         
         file = os.path.join(directory, "launcher.py")
