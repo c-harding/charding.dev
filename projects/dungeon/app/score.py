@@ -49,7 +49,7 @@ def score(score, screen, text, row):
                         pos=max(pos-1,0)
             elif ord(key) is 127:
                 if pos is not 0: pos -= 1
-                name.pop(pos)
+                if len(name) is not 0: name.pop(pos)
         
             screen.move(row,0)
             screen.clrtoeol()
