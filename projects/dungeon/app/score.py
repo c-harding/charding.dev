@@ -83,29 +83,31 @@ class Scores(UI):
     version = update.get_version()
     errormsg = "No scores found"
     
-    scoreslist = get_scores()
-    
-    try:
-        longest_name = min(
-                           50,
-                           len(max(
-                                   scoreslist,
-                                   key=lambda score: len(score["name"])
-                                  )["name"])
-                          )
-        longest_score = len(str(max(
-                                    scoreslist,
-                                    key=lambda score: score["num"]
-                                   )["num"]))
-    except ValueError:
-        longest_name = longest_score = 0
-    
-    max_len = max(longest_name + longest_score + 6, len(title), len(sub), len(errormsg), 1+len(version))
-    width = max_len+4
-    innerheight = max(1,len(scoreslist))
-    pos = 2
+    longest_name = longest_score = 0
     
     def __init__(self, *args, **kwargs):
+        scoreslist = get_scores()
+    
+        try:
+            self.longest_name = min(
+                               50,
+                               len(max(
+                                       self.scoreslist,
+                                       key=lambda score: len(score["name"])
+                                      )["name"])
+                              )
+            self.longest_score = len(str(max(
+                                        self.scoreslist,
+                                        key=lambda score: score["num"]
+                                       )["num"]))
+        except ValueError:
+            self.longest_name = self.longest_score = 0
+        
+        self.max_len = max(longest_name + longest_score + 6, len(title), len(sub), len(errormsg), 1+len(version))
+        self. width = max_len+4
+        self.innerheight = max(1,len(scoreslist))
+        self.pos = 2
+        
         print(args[0].getmaxyx())
         self.max_height = args[0].getmaxyx()[0]
         self.outerheight = min(self.max_height-10, self.innerheight)
