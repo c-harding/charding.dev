@@ -370,10 +370,7 @@
                 
                 //document.write(newstr);
                 document.getElementById("box").innerHTML = newstr;
-                $('#answerinput').on('input',checkAnswer)
-                $('.shader').addClass('shown caesar')
-                
-                function checkAnswer() {
+                $('#answerinput').on('input',function () {
                     var y;
                     y = document.getElementById("answerinput").value.toLowerCase();
                     y = y.replace(/[^a-z ]/g, '').replace(/ +/g,' ')
@@ -382,7 +379,8 @@
                         puzzles_solved ++
                         $('.shader').removeClass('shown caesar')
                     }
-                }
+                })
+                $('.shader').addClass('shown caesar')
             }
         }
 
@@ -534,7 +532,7 @@
 
 <body>
     <h1>&#x39A;&#x3C1;&#x3C5;&#x3C0;&#x3C4;&#x3BF;&#x3B4;&#x3BF;&#x3C2;</h1>
-    <h2>Kryptodos</h2>
+    <h2>Cryptodos</h2>
     <hr />
     <canvas id="isocanvas" width="500" height="500"></canvas>
 
