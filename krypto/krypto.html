@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="author" content="Charlie Harding" />
-    <title>JavaScript examples</title>
+    <title>Κρυπτοδος</title>
     <style>
         * {
             font-family: 'Georgia', serif
@@ -49,14 +49,21 @@
 
         .shader.shown.slide #slide {
             display: block;
-        }
-
-        .puzzlecanvas {
-            margin-left: 50px
+            padding-left: 50px;
         }
 
         .shader.shown.spot #spotthediff {
             display: block;
+        }
+
+        .shader.shown.maths #maths {
+            display: block;
+            padding: 20px;
+        }
+
+        .shader.shown.caesar #caesar {
+            display: block;
+            padding: 20px;
         }
 
         #spotthediff {
@@ -95,7 +102,7 @@
         // Blank lines can be added anywhere to help with readability.
         // Variable names should start with a lower case character.
 
-        var puzzles = 1
+        var puzzles = 2
         var reds = 2*puzzles + 1
         var redN = 0
 
@@ -329,7 +336,7 @@
 
         function open_puzzle(door) {
             inpuzzle = true
-            puzzle = ['slide','spot'][puzzles_solved]
+            puzzle = ['slide','caesar','spot','maths'][puzzles_solved]
 
             if (puzzle == "spot") {
                 $('.spotdiffimg').each(function(){
@@ -361,6 +368,86 @@
                 $('.shader').addClass('shown spot')
             } else if (puzzle == "slide") {
                 $('.shader').addClass('shown slide')
+            } else if (puzzle == "maths") {
+                var a = Math.floor(Math.random()*900 + 100)
+                var b = Math.floor(Math.random()*900 + 100)
+                var c = Math.floor(Math.random()*900 + 100)
+                var d = Math.floor(Math.random()*900 + 100)
+                var e = Math.floor(Math.random()*900 + 100)
+                var f = Math.floor(Math.random()*900 + 100)
+                if (f > e) {
+                    var g = f
+                    f = e
+                    e = g
+                }
+
+                $('#math-a').html(a/100)
+                $('#math-b').html(b/100)
+                $('#math-c').html(c/100)
+                $('#math-d').html(d/100)
+                $('#math-e').html(e/100)
+                $('#math-f').html(f/100)
+
+                function checkanswers(){
+                    if (
+                        parseFloat($('#math-ab').val()) == (a+b)/100
+                       &&
+                        parseFloat($('#math-cd').val()) == (c+d)/100
+                       &&
+                        parseFloat($('#math-ef').val()) == (e-f)/100
+                       ) {
+                        inpuzzle = false
+                        puzzles_solved ++
+                        $('.shader').removeClass('shown maths')
+                    }
+                }
+
+                $('#maths input').on('input',checkanswers)
+
+                $('.shader').addClass('shown maths')
+            } else if (puzzle == "caesar") {
+                var compare = ['A','B','C','D','E','F','G','H','I','J','K',
+                'L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+                var alphabet = ['A','B','C','D','E','F','G','H','I','J','K',
+                'L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+                
+                //TYPE MESSAGE TO BE DECIPHERED HERE
+                var str = "HOW DID YOU ESCAPE MY CHALLENGES WERE IMPOSSIBLE EVEN FOR THE GREATEST MINDS I WILL HAVE REVENGE THE MASTER";
+                
+                var shiftBy = Math.floor((Math.random() * 25) + 1); 
+                for ( i = 1 ; i <= shiftBy ; ++i ) {
+                    var element = alphabet.shift();
+                    alphabet.push(element);
+                }
+                
+                var strLength = str.length;
+                var newstr = "";
+                for ( i = 0; i <= strLength - 1 ; ++i ) {
+                    var x = String(str.charAt(i));
+                    if (x == " ") {
+                        newstr += " ";
+                        continue;
+                    }
+                    var a = compare.indexOf(x);
+                    var valueAtIndex = String(alphabet[a]);
+                    newstr += valueAtIndex;
+                }
+                
+                //document.write(newstr);
+                document.getElementById("box").innerHTML = newstr;
+                $('#answerinput').on('input',checkAnswer)
+                $('.shader').addClass('shown caesar')
+                
+                function checkAnswer() {
+                    var y;
+                    y = document.getElementById("answerinput").value.toLowerCase();
+                    y = y.replace(/[^a-z ]/g, '').replace(/ +/g,' ')
+                    if (y === str.toLowerCase()) {
+                        inpuzzle = false
+                        puzzles_solved ++
+                        $('.shader').removeClass('shown caesar')
+                    }
+                }
             }
         }
 
@@ -528,6 +615,21 @@
             <canvas id="puzzlecanvas" height="500px" width="500px"></canvas>
             <script src="slidingPuzzle/sliding.js"></script>
             <div>&times;</div>
+        </div>
+
+        <div class='puzzle' id='caesar'>
+            <h2>Read the message&hellip;</h2>
+            <p id='box'></p>
+            <input id="answerinput" type="text" style="width:650px;">
+        </div>
+        <div class='puzzle' id='maths'>
+            <h2>Solve the maths!</h2>
+            <p><span id="math-a"></span> + <span id="math-b"></span></p>
+            <input id="math-ab" type="number" min="0" max="20" step="0.01" value="0.00">
+            <p><span id="math-c"></span> + <span id="math-d"></span></p>
+            <input id="math-cd" type="number" min="0" max="20" step="0.01" value="0.00">
+            <p><span id="math-e"></span> - <span id="math-f"></span></p>
+            <input id="math-ef" type="number" min="0" max="10" step="0.01" value="0.00">
         </div>
     </div>
 </body>

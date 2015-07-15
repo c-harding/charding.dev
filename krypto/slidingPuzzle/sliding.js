@@ -25,7 +25,7 @@ setBoard();
 
 
 document.getElementById('puzzlecanvas').onclick = function(e) {
-  clickLoc.x = Math.floor((e.pageX - this.getBoundingClientRect().left) / tileSize); // check this
+  clickLoc.x = Math.floor((e.pageX - this.getBoundingClientRect().left) / tileSize);
   clickLoc.y = Math.floor((e.pageY - this.getBoundingClientRect().top) / tileSize);
   if (distance(clickLoc.x, clickLoc.y, emptyLoc.x, emptyLoc.y) == 1) {
     slideTile(emptyLoc, clickLoc);
@@ -35,7 +35,7 @@ document.getElementById('puzzlecanvas').onclick = function(e) {
     setTimeout(function() {
       inpuzzle = false
       puzzles_solved ++
-      $('.shader').removeClass('shown spot')
+      $('.shader').removeClass('shown slide')
     }, 2000);
   }
 };
