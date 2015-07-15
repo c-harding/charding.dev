@@ -5,84 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Charlie Harding" />
     <title>Κρυπτοδος</title>
-    <style>
-        * {
-            font-family: 'Georgia', serif
-        }
-
-        html, body {
-            margin: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        canvas#isocanvas {
-            border: 1px solid gray;
-            border-radius: 50px;
-        }
-
-        .shader {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: rgba(0,0,0,0.4)
-        }
-
-        .shader.shown {
-            display: block;
-        }
-
-        .puzzle {
-            width: 700px;
-            height: 500px;
-            position: relative;
-            margin: 100px auto 0;
-            border-radius: 50px;
-            background-color: white;
-            box-shadow: 0px 5px 5px rgba(0,0,0,0.3);
-            box-sizing: border-box;
-            display: none;
-        }
-
-        .shader.shown.slide #slide {
-            display: block;
-            padding-left: 50px;
-        }
-
-        .shader.shown.spot #spotthediff {
-            display: block;
-        }
-
-        .shader.shown.maths #maths {
-            display: block;
-            padding: 20px;
-        }
-
-        .shader.shown.caesar #caesar {
-            display: block;
-            padding: 20px;
-        }
-
-        #spotthediff {
-            padding: 25px;
-        }
-
-        .spotdiffimg {
-            width: 320px;
-            height: 228px;
-            background-size: cover;
-            display: inline-block;
-        }
-
-        .hotspot {
-            width: 16.5%;
-            height: 16.5%;
-            float: left;
-        }
-    </style>
+    <link href='krypto.css' rel="stylesheet" />
 
     <!-- Incorporate jQuery -->
     <!-- Could do this via web: http://code.jquery.com/jquery-2.1.3.min.js -->
@@ -402,7 +325,19 @@
                     }
                 }
 
-                $('#maths input').on('input',checkanswers)
+                $('#maths input').on('input', function (){
+                    if (
+                        parseFloat($('#math-ab').val()) == (a+b)/100
+                       &&
+                        parseFloat($('#math-cd').val()) == (c+d)/100
+                       &&
+                        parseFloat($('#math-ef').val()) == (e-f)/100
+                       ) {
+                        inpuzzle = false
+                        puzzles_solved ++
+                        $('.shader').removeClass('shown maths')
+                    }
+                })
 
                 $('.shader').addClass('shown maths')
             } else if (puzzle == "caesar") {
@@ -499,12 +434,14 @@
                 if (num == 5)
                     open_puzzle(false)
                 if (num == 6) {
-                    alert(6)
-                    console.log(puzzles_solved, 2*puzzles)
                     if (puzzles_solved != 2*puzzles) {
                         no_win == true
                     }
-                    else alert('win')
+                    else {
+                        inpuzzle = true
+                        $('#win img')[0].src = man.src
+                        $('.shader').addClass('shown win')
+                    }
                 } 
                 if (num == 2)
                     alert("Unrecognised security checkpoint")
@@ -598,7 +535,7 @@
 <body>
     <h1>&#x39A;&#x3C1;&#x3C5;&#x3C0;&#x3C4;&#x3BF;&#x3B4;&#x3BF;&#x3C2;</h1>
     <h2>Kryptodos</h2>
-    <pre></pre>
+    <hr />
     <canvas id="isocanvas" width="500" height="500"></canvas>
 
     <div class='shader'>
@@ -630,6 +567,13 @@
             <input id="math-cd" type="number" min="0" max="20" step="0.01" value="0.00">
             <p><span id="math-e"></span> - <span id="math-f"></span></p>
             <input id="math-ef" type="number" min="0" max="10" step="0.01" value="0.00">
+        </div>
+        <div class='puzzle' id='win'>
+            <h2>Congratulations, you have escaped &mdash; this time&hellip;</h2>
+            <img>
+            <form action="javascript:location=location">
+                <input type="submit" value="Play again, if you dare!">
+            </form>
         </div>
     </div>
 </body>
