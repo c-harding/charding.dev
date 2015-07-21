@@ -720,7 +720,6 @@ $(document).keydown(function(e) {
 
 function onSwipes(){
     hammer = new Hammer.Manager(document.body);
-    console.log('swipes on')
     swipe = new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL })
     hammer.add(swipe)
     hammer.on("swipe", function(eventObject) {
@@ -739,7 +738,6 @@ function onSwipes(){
 }
 
 function offSwipes(){
-    console.log('swipes off')
     hammer.destroy()
 }
 
