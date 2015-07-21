@@ -355,6 +355,8 @@ function open_puzzle(door) {
     inpuzzle = true
     puzzle = ['slide','caesar','spot','maths'][puzzles_solved]
 
+    zoom(true)
+
     if (puzzle == "spot") {
         $('.spotdiffimg').each(function(){
             for (var i = 0; i!=6*6; i++) {
@@ -378,6 +380,7 @@ function open_puzzle(door) {
                 inpuzzle = false
                 puzzles_solved ++
                 $('.shader').removeClass('shown spot')
+                zoom(false)
             }
 
             $('#spotfound').html(found)
@@ -414,6 +417,7 @@ function open_puzzle(door) {
                 parseFloat($('#math-ef').val()) == (e-f)/100
                ) {
                 inpuzzle = false
+                zoom(false)
                 puzzles_solved ++
                 $('.shader').removeClass('shown maths')
             }
@@ -428,6 +432,7 @@ function open_puzzle(door) {
                 parseFloat($('#math-ef').val()) == (e-f)/100
                ) {
                 inpuzzle = false
+                zoom(false)
                 puzzles_solved ++
                 $('.shader').removeClass('shown maths')
             }
@@ -470,6 +475,7 @@ function open_puzzle(door) {
             y = y.replace(/[^a-z ]/g, '').replace(/ +/g,' ')
             if (y === str.toLowerCase()) {
                 inpuzzle = false
+                zoom(false)
                 puzzles_solved ++
                 $('.shader').removeClass('shown caesar')
             }
@@ -632,6 +638,7 @@ $(document).keydown(function(e) {
             }
             else {
                 inpuzzle = true
+                zoom(true)
                 $('#win img')[0].src = man.src
                 $('.shader').addClass('shown win')
             }
@@ -711,9 +718,11 @@ $(document).keydown(function(e) {
     e.preventDefault(); // prevent the default action (scroll / move caret)
 });
 
-$(function setupSwipes(){
-    var hammer = new Hammer(document.body);
-    hammer.get("swipe").set({ direction: Hammer.DIRECTION_ALL });
+function onSwipes(){
+    hammer = new Hammer.Manager(document.body);
+    console.log('swipes on')
+    swipe = new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL })
+    hammer.add(swipe)
     hammer.on("swipe", function(eventObject) {
         var key = 0
         if(eventObject.angle < -90) {
@@ -727,7 +736,23 @@ $(function setupSwipes(){
         }
         $('#isocanvas').trigger({type: 'keydown', which: key, keyCode: key})
     })
-})
+}
+
+function offSwipes(){
+    console.log('swipes off')
+    hammer.destroy()
+}
+
+function zoom(on) {
+    onMeta = 'width=600, minimum-scale=0.7, initial-scale=0.7'
+    offMeta = 'width=600, minimum-scale=0.7, maximum-scale=0.7, initial-scale=0.7'
+    $('meta[name="viewport"]').attr('content', on ? onMeta : offMeta)
+    if (on) offSwipes()
+    else {
+        onSwipes()
+        $('input:focus').blur()
+    }
+}
 
 man = new Image()
 man.onload = render3d
@@ -739,3 +764,5 @@ var map = makePaths(false)
 $(vision);
 
 $(render3d);
+
+$(onSwipes);

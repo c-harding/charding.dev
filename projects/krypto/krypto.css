@@ -37,11 +37,12 @@
     #puzzlecanvas {
         display: block;
         margin: 0 auto;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .puzzle {
-        width: 700px;
-        height: 500px;
+        width: 500px;
+        height: 700px;
         position: relative;
         margin: 100px auto 0;
         border-radius: 50px;
@@ -53,6 +54,7 @@
 
     .shader.shown.slide #slide {
         display: block;
+        padding-top: 100px;
     }
 
     .shader.shown.spot #spotthediff {
@@ -86,7 +88,8 @@
         width: 320px;
         height: 228px;
         background-size: cover;
-        display: inline-block;
+        display: block;
+        margin: 30px auto;
     }
 
     .hotspot {
