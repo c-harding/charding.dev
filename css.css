@@ -38,13 +38,6 @@ a:hover {
     text-decoration: underline;
 }
 
-img.me {
-    width: 30%;
-    float: right;
-    border-top-right-radius: 10px;
-    margin: -20px -20px 20px 20px;
-}
-
 #navbar {
     position: absolute;
     top: -25px;
