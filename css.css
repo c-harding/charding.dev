@@ -77,3 +77,8 @@ a:hover {
 .grey {
     color: gray;
 }
+
+img.map {
+    max-width: 100%;
+    max-height: 50vh;
+}

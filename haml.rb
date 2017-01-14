@@ -15,17 +15,17 @@ class Regions
   end
 end
 
-regions = Regions.new
-
 [
   "",
   "projects/",
   "projects/CSSpro/",
   "projects/dungeon/",
   "projects/jsCSS/",
-  "projects/styleCSS/"
+  "projects/styleCSS/",
+  "designs/ah/",
 ].each do |f|
   begin
+    regions = Regions.new
     file = Haml::Engine.new(File.read("#{f}index.haml")).render(regions)
     rendered = Haml::Engine.new(File.read("template.haml")).render false, f: f do |region|
       region ? regions[region] : file
