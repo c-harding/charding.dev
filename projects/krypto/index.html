@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Charlie Harding" />
+    <meta name="viewport" content="width=600, minimum-scale=0.7, maximum-scale=0.7, initial-scale=0.7" />
+    <title>Κρυπτόδός</title>
+    <link href='krypto.css' rel="stylesheet" />
+
+    <script src="jquery-2.1.3.min.js"></script>
+
+    <script src="hammer.min.js"></script>
+    <script src="krypto.js"></script>
+
+</head>
+
+<body>
+    <h1>Κρυπτόδός</h1>
+    <h2>Cryptodos</h2>
+    <hr />
+    <canvas id="isocanvas" width="500" height="500"></canvas>
+
+    <div class='shader'>
+        <div class='puzzle' id='spotthediff'>
+            <h2>Spot the differences. Good luck!</h2>
+
+            <div class='spotdiffimg' style="background-image: url('microchipA.jpg')">
+            </div>
+            <div class='spotdiffimg' style="background-image: url('microchipB.jpg')">
+            </div>
+            <p><span id='spotfound'>0</span> of 4 found</p>
+        </div>
+        <div class='puzzle' id='slide'>
+            <canvas id="puzzlecanvas" height="500px" width="500px"></canvas>
+            <script src="slidingPuzzle/sliding.js"></script>
+        </div>
+
+        <div class='puzzle' id='caesar'>
+            <h2>Read the message&hellip;</h2>
+            <p id='box'></p>
+            <input id="answerinput" type="text" style="width:450px;">
+        </div>
+        <div class='puzzle' id='maths'>
+            <h2>Solve the maths!</h2>
+            <p><span id="math-a"></span> + <span id="math-b"></span></p>
+            <input id="math-ab" type="number" min="0" max="20" step="0.01" value="0.00">
+            <p><span id="math-c"></span> + <span id="math-d"></span></p>
+            <input id="math-cd" type="number" min="0" max="20" step="0.01" value="0.00">
+            <p><span id="math-e"></span> - <span id="math-f"></span></p>
+            <input id="math-ef" type="number" min="0" max="10" step="0.01" value="0.00">
+        </div>
+        <div class='puzzle' id='win'>
+            <h2>Congratulations, you have escaped &mdash; this time&hellip;</h2>
+            <img>
+            <form action="javascript:location=location">
+                <input type="submit" value="Play again, if you dare!">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
