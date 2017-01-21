@@ -14,13 +14,17 @@ html {
 }
 
 article {
-    font-family: 'Segoe UI', Helvetica, Calibri, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 code,
 pre {
     font-family: 'Ubuntu Mono', Monaco, monospace;
     overflow-x: auto;
+}
+
+li {
+    margin-bottom: 0.25em;
 }
 
 h1,

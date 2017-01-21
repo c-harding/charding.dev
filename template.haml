@@ -5,7 +5,9 @@
 		%link{href: "/css.css", rel: "stylesheet", type: "text/css"}
 		%meta{name: "viewport", content: "width=400, initial-scale=1, target-densityDpi=device-dpi"}
 		= yield :head
-	
+		/[if lt IE 9]
+			:javascript
+				document.createElement('article');
 	%body
 		%article
 			=yield
