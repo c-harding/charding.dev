@@ -36,6 +36,6 @@ end
     puts "File '#{f}' written successfully"
   rescue
     puts "File '#{f}index.haml' not read."
-    #puts $!, $@
+    puts $!
   end
 end
