@@ -22,6 +22,7 @@ end
   "projects/dungeon/",
   "projects/jsCSS/",
   "projects/styleCSS/",
+  "designs/",
   "designs/ah/",
 ].each do |f|
   begin

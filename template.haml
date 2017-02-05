@@ -18,4 +18,5 @@
 			
 			#navbar
 				%a{href: "/", class: [("this" if "/#{f}" == "/")]} Home
-				%a{href: "/projects/", class: [("this" if "/#{f}" == "/projects/")]} Projects
+				%a{href: "/projects/", class: [("this" if "/#{f}".include? "/projects/")]} Projects
+				%a{href: "/designs/", class: [("this" if "/#{f}".include? "/designs/")]} Designs
