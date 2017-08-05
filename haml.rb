@@ -15,28 +15,21 @@ class Regions
   end
 end
 
-[
-  "",
-  "projects/",
-  "projects/CSSpro/",
-  "projects/dungeon/",
-  "projects/jsCSS/",
-  "projects/styleCSS/",
-  "designs/",
-  "designs/ah/",
-].each do |f|
+Dir['**/index.haml'].each do |input|
   begin
+    dir = input.sub(/index\.haml$/, "")
+    output = "#{dir}index.html"
     regions = Regions.new
-    file = Haml::Engine.new(File.read("#{f}index.haml")).render(regions)
-    rendered = Haml::Engine.new(File.read("template.haml")).render false, f: f do |region|
+    file = Haml::Engine.new(File.read(input)).render(regions)
+    rendered = Haml::Engine.new(File.read("template.haml")).render false, f: dir do |region|
       region ? regions[region] : file
     end
     
-    File.open("#{f}index.html", 'w') {|file| file.write rendered}
+    File.open(output, 'w') {|file| file.write rendered}
 
-    puts "File '#{f}' written successfully"
+    puts "File '#{output}' written successfully"
   rescue
-    puts "File '#{f}index.haml' not read."
+    puts "Directory '#{dir}' not processed."
     puts $!
   end
 end
