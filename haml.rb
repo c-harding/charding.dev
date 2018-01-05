@@ -21,15 +21,16 @@ Dir['**/index.haml'].each do |input|
     output = "#{dir}index.html"
     regions = Regions.new
     file = Haml::Engine.new(File.read(input)).render(regions)
-    rendered = Haml::Engine.new(File.read("template.haml")).render false, f: dir do |region|
+    rendered = Haml::Engine.new(File.read("template.haml")).render Object.new, f: dir do |region|
       region ? regions[region] : file
     end
     
-    File.open(output, 'w') {|file| file.write rendered}
+    File.open(output, 'w') {|f| f.write rendered}
 
     puts "File '#{output}' written successfully"
   rescue
     puts "Directory '#{dir}' not processed."
     puts $!
+    puts $!.backtrace if $DEBUG
   end
 end
