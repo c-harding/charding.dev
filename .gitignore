@@ -1,3 +1,6 @@
-*.swp
 dungeon_scores.json
 .sass-cache
+*.html
+*.css
+*.css.map
+sitemap.xml

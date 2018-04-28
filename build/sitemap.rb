@@ -34,7 +34,9 @@ end
 
 fqdn = ARGV[0]
 
-if fqdn.nil?
+fqdn = "https://#{File.read('CNAME').strip}"
+
+unless fqdn
   STDERR.puts 'Please provide a fully qualified domain name, such as http://google.com/, as an argument.'
   exit 1
 end
