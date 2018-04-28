@@ -36,7 +36,7 @@ end
 
 fqdn = ARGV[0]
 
-fqdn = "https://#{File.read('CNAME').strip}"
+fqdn = "https://#{File.read('CNAME').strip}/"
 
 unless fqdn
   STDERR.puts 'Please provide the path to your site as an argument, such as '+
