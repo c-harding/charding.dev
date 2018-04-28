@@ -1,0 +1,15 @@
+- name: AirGestures
+  url:  https://teamlimoncello.github.io/ICHack18/
+  desc: an app created for the ICHack 2018 as part of Team Limoncello. It allows a user to control their computer using gestures in the air.
+- name: Κρυπτοδος
+  url:  krypto/
+  desc: an educational maze game written in JavaScript using HTML canvas.
+- name: Dungeon
+  url:  dungeon/
+  desc: a game of escape, written in Python and run at the command line.
+- name: styleCSS
+  url:  styleCSS/
+  desc: a self-built client-side CSS preprocessor written in JavaScript.
+- name: jsCSS
+  url:  jsCSS/
+  desc: an API for dynamically adding CSS rules by selector.
