@@ -4,18 +4,14 @@
 		%meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
 		%meta(name="google-site-verification" content="HQ99lrPlfaq65SFxTcEW1DeHq3EHqHi5OA-tVpelkAA")
 		%title= yield :title
-		%link{href: "/css.css", rel: "stylesheet", type: "text/css"}
-		%meta{name: "viewport", content: "width=400, initial-scale=1, target-densityDpi=device-dpi"}
+		%link{href: "/style.css", rel: "stylesheet", type: "text/css"}
+		%meta{name: "viewport", content: "width=device-width, initial-scale=1, target-densityDpi=device-dpi"}
 		= yield :head
-		/[if lt IE 9]
-			:javascript
-				document.createElement('article');
-			:css
-				article { display: block }
 	%body
 		%article
-			=yield
+			= yield
 			
 			#navbar
-				%a{href: "/", class: [("this" if "/#{f}" == "/")]} Home
-				%a{href: "/projects/", class: [("this" if "/#{f}" == "/projects/")]} Projects
+				%a{link_to("/")} Home
+				%a{link_to("/projects/")} Projects
+				%a{link_to("/designs/")} Designs
