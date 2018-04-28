@@ -9,6 +9,8 @@ class Entry
     @time = time
   end
 
+  attr_reader :path
+
   def to_xml
     <<~XML
       <url>
@@ -37,16 +39,20 @@ fqdn = ARGV[0]
 fqdn = "https://#{File.read('CNAME').strip}"
 
 unless fqdn
-  STDERR.puts 'Please provide a fully qualified domain name, such as http://google.com/, as an argument.'
+  STDERR.puts 'Please provide the path to your site as an argument, such as '+
+              'http://user.github.io/project/, as an argument, or create a '+
+              'CNAME file at the root of your project.'
   exit 1
 end
 
 urlset = []
 
-Dir['**/*.haml'].each do |input|
+(Dir['**/*.haml'] + Dir['**/*.html']).each do |input|
   next if input.match? "template.haml"
+  path = fqdn + input.sub(/(^|\/)index\.haml$/,'').sub(/\.haml$/,'.html')
+  next if urlset.any? {|x| path == x.path }
   date = `git log -1 --format=%cI #{input.shellescape}`.strip
-  urlset << Entry.new(fqdn + input.sub(/index\.haml$/,'').sub(/\.haml$/,'.html'), date)
+  urlset << Entry.new(path, date)
 end
 
 File.write 'sitemap.xml', to_xml(urlset)
