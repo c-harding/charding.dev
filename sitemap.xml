@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+      http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://xsanda.medesigns/ah/</loc>
+  <lastmod>2018-01-05T00:10:40+00:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.medesigns/gwr/</loc>
+  <lastmod>2017-08-05T21:04:23+01:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.medesigns/</loc>
+  <lastmod>2017-08-05T21:04:23+01:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.me</loc>
+  <lastmod>2018-01-28T12:36:48+00:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.meprojects/dungeon/</loc>
+  <lastmod>2015-05-28T16:30:15+01:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.meprojects/</loc>
+  <lastmod>2018-01-28T12:36:48+00:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.meprojects/jsCSS/</loc>
+  <lastmod>2015-05-18T00:06:01+01:00</lastmod>
+</url>
+<url>
+  <loc>https://xsanda.meprojects/styleCSS/</loc>
+  <lastmod>2017-02-04T15:23:37+00:00</lastmod>
+</url>
+
+</urlset>
