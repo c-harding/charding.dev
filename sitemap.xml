@@ -5,43 +5,39 @@
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
-  <loc>https://xsanda.medesigns/ah</loc>
-  <lastmod>2018-01-05T00:10:40+00:00</lastmod>
+  <loc>https://xsanda.me/designs/ah/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.medesigns/gwr</loc>
-  <lastmod>2017-08-05T21:04:23+01:00</lastmod>
+  <loc>https://xsanda.me/designs/gwr/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.medesigns</loc>
-  <lastmod>2017-08-05T21:04:23+01:00</lastmod>
+  <loc>https://xsanda.me/designs/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.me</loc>
-  <lastmod>2018-01-28T12:36:48+00:00</lastmod>
+  <loc>https://xsanda.me/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.meprojects/dungeon</loc>
-  <lastmod>2015-05-28T16:30:15+01:00</lastmod>
+  <loc>https://xsanda.me/projects/dungeon/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.meprojects</loc>
-  <lastmod>2018-01-28T12:36:48+00:00</lastmod>
+  <loc>https://xsanda.me/projects/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.meprojects/jsCSS</loc>
-  <lastmod>2015-05-19T19:28:13+01:00</lastmod>
+  <loc>https://xsanda.me/projects/jsCSS/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.meprojects/styleCSS</loc>
-  <lastmod>2017-02-04T15:23:37+00:00</lastmod>
+  <loc>https://xsanda.me/projects/styleCSS/index.html.html</loc>
+  <lastmod>2018-04-28T03:20:49+01:00</lastmod>
 </url>
 <url>
-  <loc>https://xsanda.mekrypto/krypto.html</loc>
-  <lastmod>2015-07-20T22:27:42+01:00</lastmod>
-</url>
-<url>
-  <loc>https://xsanda.meprojects/krypto/index.html</loc>
+  <loc>https://xsanda.me/projects/krypto/index.html</loc>
   <lastmod>2017-01-08T11:34:20+00:00</lastmod>
 </url>
 
