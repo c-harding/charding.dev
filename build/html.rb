@@ -78,7 +78,7 @@ class HamlParser
     rescue => error
       STDERR.puts "Cannot process #{input}"
   
-      STDERR.puts error.backtrace #if $DEBUG
+      STDERR.puts error.backtrace if ENV["DEBUG"]
   
       if error.to_s.match? /To use the "maruku" filter/
         STDERR.puts <<~ERROR
