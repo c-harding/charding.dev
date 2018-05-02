@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="Axiomatic.css">
+  <title>Exploring the axiomatic semantics of array access</title>
+</head>
+<body>
+  <h1>Exploring the axiomatic semantics of array access for the While language</h1>
+  <cite>Charlie Harding</cite>
+  <p>The following is based on <a href="Axiomatic.html">the axiomatic semantic rules for the While language</a>.</p>
+  <h2>Assignment</h2>
+  <p>The following is the rule proposed for assignment as per <i>Nielson and Nielson</i>.</p>
+  <axiom>
+  <stm><rule>ASSN</rule><cond>P<update><syntax>x</syntax><aval>a</aval></update></cond>x := a<cond>P</cond></stm>
+  </axiom>
+
+  <h3>Example</h3>
+
+  <axiom>
+    <axiom>
+      <axiom>
+        <stm><rule>ASSN</rule><cond><aval>(y = 12) ? 5 : 7</aval> = 5</cond>x := (y = 12) ? 5 : 7<cond><aval>x</aval> = 5</cond></stm>
+      </axiom>
+      <stm><rule>CONS</rule><cond><ternary><div><span>5</span><span><aval>y</aval> = 12</span></div><div><span>7</span><span>otherwise</span></div></ternary> = 5</cond>x := (y = 12) ? 5 : 7<cond><aval>x</aval> = 5</cond></stm>
+    </axiom>
+    <stm>
+        <rule>CONS</rule>
+        <cond><aval>y</aval> = 12</cond>x := (y = 12) ? 5 : 7<cond><aval>x</aval> = 5</cond>
+    </stm>
+  </axiom>
+
+  <p>Note that the CONS rule has been split in two, to make clear the derivation process.</p>
+
+  <h2>Array Assignment</h2>
+  <p>I propose the following rule for array assignment:</p>
+  <axiom>
+  <stm><rule>ARRA</rule><cond>P<update><listval><syntax>x</syntax><aval>a₁</aval></listval><aval>a₂</aval></update></cond>x[a₁] := a₂<cond>P</cond></stm>
+  </axiom>
+  <p>where <aval>arr[x]</aval> resolves to <listval><syntax>arr</syntax><aval>x</aval></listval>. This in turn could, for example, resolve to <aval><text>“</text>arr;<text>” concatenated with str(<aval>x</aval>)</text></aval>, where str is the string representation of a number, but such a definition is not needed for this exercise.</p>
+
+  <h3>Example</h3>
+
+  <axiom>
+    <axiom>
+      <axiom>
+        <stm>
+          <rule>ARRA</rule>
+          <cond><aval>x</aval> = <aval>y</aval> <and/> 5 = 5</cond>arr[y] := 5<cond><aval>x</aval> = <aval>y</aval> <and/> <listval><syntax>arr</syntax><aval>y</aval></listval> = 5</cond></stm>
+      </axiom>
+      <stm>
+        <rule>COND</rule>
+        <cond><aval>x</aval> = <aval>y</aval> <and/> 5 = 5</cond>arr[y] := 5<cond><listval><syntax>arr</syntax><aval>x</aval></listval> = 5</cond></stm>
+    </axiom>
+    <stm>
+        <rule>CONS</rule>
+        <cond><aval>x</aval> = <aval>y</aval></cond>arr[y] := 5<cond><aval>arr[x]</aval> = 5</cond>
+    </stm>
+  </axiom>
+
+  <p>My concern with this approach, however, is that the onus of converting array accesses has to be on the right-hand side, rather than the left-hand side. It also seems a bit strange that <aval>arr[x]</aval> occurs as the consequent from <listval><syntax>arr</syntax><aval>x</aval></listval>, rather than the other way around, but I presume this is because the condition involves a lot of syntax.</p>
+</body>
+</html>
