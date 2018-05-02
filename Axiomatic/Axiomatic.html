@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="Axiomatic.css">
+</head>
+<body>
+  <h1>Axiomatic semantic rules of the While language</h1>
+  <cite>Charlie Harding</cite>
+  <h2>Skip</h2>
+  <axiom>
+  <stm><rule>SKIP</rule><cond>P</cond>skip<cond>P</cond></stm>
+  </axiom>
+
+  <h2>Sequences</h2>
+  <axiom>
+  <axiom><given><cond>P</cond>S₁<cond>R</cond></given></axiom>
+  <axiom><given><cond>R</cond>S₂<cond>Q</cond></given></axiom>
+  <stm><rule>SEQ</rule><cond>P</cond>S₁ ; S₂<cond>Q</cond></stm>
+  </axiom>
+
+  <h2>Conditional</h2>
+  <axiom>
+  <axiom><given><cond>P <and/> b</cond>S₁<cond>Q</cond></given></axiom>
+  <axiom><given><cond>P <and/> ~b</cond>S₂<cond>Q</cond></given></axiom>
+  <stm><rule>COND</rule><cond>P</cond>if b then S₁ else S₂<cond>Q</cond></stm>
+  </axiom>
+
+  <h2>Loops</h2>
+  <axiom>
+  <axiom><given><cond>P <and/> b</cond>S<cond>P</cond></given></axiom>
+  <stm><rule>LOOP</rule><cond>P</cond>while b do S<cond>P <and/> ~b</cond></stm>
+  </axiom>
+
+  <axiom>
+  <axiom><given><cond>P <or/> (Q <and/> ~b)</cond>S<cond>Q</cond></given></axiom>
+  <stm><rule>REPT</rule><cond>P</cond>repeat S until b<cond>Q <and/> b</cond></stm>
+  </axiom>
+
+  <h2>Assignment</h2>
+
+  <axiom>
+  <stm><rule>ASSN</rule><cond>P<update><syntax>x</syntax><aval>a</aval></update></cond>x := a<cond>P</cond></stm>
+  </axiom>
+
+  <!-- <axiom>
+    <stm>
+      <rule>ARRA</rule>
+      <cond>P<update><syntax>a₁</syntax><syntax>a₁<update><syntax>a₂</syntax><syntax>x</syntax></update></syntax></update></cond>
+      a₁[a₂] := x
+      <cond>P</cond></stm>
+  </axiom>
+
+  <axiom>
+    <stm>
+      <rule>ARRA</rule>
+      <cond>P<update><syntax>a₁[a₂]</syntax><syntax>x</syntax></update></cond>
+      a₁[a₂] := x
+      <cond>P</cond>
+    </stm>
+  </axiom>
+
+  <h3>Example</h3>
+
+  <code>
+    varName :: LValue -> State -> String
+    varName (Var var) s = var
+    varName (Array arr i) s = case a_syntax i s of
+      0        -> arr
+      i_syntax -> arr ++ ";" ++ i_syntax
+
+    s_ds (Assign var x) s = update (varName var s) a_syntax x s
+  </code>
+
+  <axiom>
+    <axiom>
+      <axiom>
+        <stm><cond>(<syntax>x</syntax> = 5)<update><syntax>x</syntax><syntax>(y = 12) ? 5 : 7</syntax></update></cond>x := (y = 12 ? 5 : 7)<cond><syntax>x</syntax> = 5</cond></stm>
+      </axiom>
+      <stm><cond><syntax>(y = 12 ? 5 : 7)</syntax> = 5</cond>x := (y = 12 ? 5 : 7)<cond><syntax>x</syntax> = 5</cond></stm>
+    </axiom>
+    <stm><cond><syntax>y</syntax> = 12</cond>x := (y = 12 ? 5 : 7)<cond><syntax>x</syntax> = 5</cond></stm>
+  </axiom> -->
+
+</body>
+</html>

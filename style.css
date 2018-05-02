@@ -63,6 +63,9 @@ a {
 .grey {
   color: gray; }
 
+.items {
+  color: gray; }
+
 img.map {
   max-width: 100%;
   max-height: 60vh;

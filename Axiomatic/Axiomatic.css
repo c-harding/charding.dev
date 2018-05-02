@@ -1,0 +1,158 @@
+axiomatic {
+    margin: 1em;
+}
+
+axiom {
+    display: inline-block;
+    text-align: center;
+    margin: 1em 10px;
+    font-size: 1rem;
+}
+axiom axiom {
+    margin: 0 10px;
+}
+and::before {
+    content: '∧';
+}
+or::before {
+    content: '∨';
+}
+syntax, aval {
+    font-family: 'Fira Code', monospace;
+    font-style: normal;
+    color: green;
+}
+aval::before {
+    font-family: serif;
+    color: black;
+    content: "𝒜 ⟦";
+}
+aval::after {
+    font-family: serif;
+    color: black;
+    content: "⟧";
+}
+listval::before {
+    font-family: serif;
+    font-style: normal;
+    color: black;
+    content: "ℒ ⟦";
+}
+listval::after {
+    font-family: serif;
+    font-style: normal;
+    color: black;
+    content: "⟧";
+}
+listval > :not(:last-child)::after {
+    font-family: serif;
+    color: black;
+    content: ', ';
+}
+update {
+    font-family: serif;
+    font-style: italic;
+    font-size: 0.9em;
+    color: black;
+}
+update::before {
+    content: ' [';
+    font-style: normal;
+      font-size: 1.1em;
+}
+update::after {
+    content: ']';
+    font-style: normal;
+    font-size: 1.1em;
+}
+update > :first-child::after {
+    content: ' ↦ ';
+    color: black;
+}
+update > listval:first-child::after {
+    font-family: serif;
+    font-style: normal;
+    color: black;
+    content: '⟧ ↦ ';
+}
+given {
+    display: block;
+    font-family: 'Fira Code', monospace;
+    padding: 5px;
+    color: green;
+}
+stm {
+    display: block;
+    font-family: 'Fira Code', monospace;
+    border-top: 1px solid black;
+    padding: 5px;
+    color: green;
+    position: relative;
+    padding-right: 2em;
+}
+rule {
+    position: absolute;
+    right: 0;
+    top: 0.1em;
+    color: black;
+    font-family: monospace;
+    font-size: 0.8em;
+}
+[color="red"] {
+    color: red;
+}
+cond {
+    display: inline;
+    font-family: serif;
+    font-style: italic;
+    color: black;
+}
+ternary {
+    display: inline-table;
+    position: relative;
+    padding: 0 1em;
+    font-size: 0.8em;
+    vertical-align: middle;
+}
+ternary > * {
+    display: table-row;
+}
+ternary > * > * {
+    display: table-cell;
+}
+ternary > * > *:first-child {
+    padding-right: 1em;
+}
+ternary::before {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '{';
+    font-size: 2em;
+    font-style: normal;
+}
+ternary::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: '}';
+    font-size: 2em;
+    font-style: normal;
+}
+cond::before {
+    content: ' {';
+      font-size: 1.2em;
+    font-style: normal;
+}
+cond::after {
+    content: '} ';
+      font-size: 1.2em;
+    font-style: normal;
+}
+code {
+    white-space: pre;
+    font-family: monospace;
+    display: block;
+}

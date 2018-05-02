@@ -1,18 +1,20 @@
 #!/usr/bin/env ruby
 require 'haml'
 
+require_relative '../site.rb'
+
 class Page
   def initialize(haml, output)
     @regions = {}
     @overwritten_regions = []
     @unused_regions = []
     @output = output
-    @content = Haml::Engine.new(haml).render(self)
+    @content = Haml::Engine.new(haml).to_html(self)
   end
 
   def content_for(region, &blk)
     @overwritten_regions << region if @regions.key? region
-    @regions[region] = capture_haml(&blk)
+    @regions[region] = blk
     @unused_regions << region
   end
 
@@ -39,8 +41,8 @@ class Page
 
   def to_html(template)
     begin
-      html = template.render self do |region|
-        region.nil? ? @content : self[region]
+      html = template.to_html self do |region, *args|
+        self[region] ? capture_haml { self[region][*args] } : @caption
       end
     rescue NameError => e
       raise e
