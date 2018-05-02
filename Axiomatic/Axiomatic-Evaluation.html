@@ -35,7 +35,7 @@
   <axiom>
   <stm><rule>ARRA</rule><cond>P<update><listval><syntax>x</syntax><aval>a₁</aval></listval><aval>a₂</aval></update></cond>x[a₁] := a₂<cond>P</cond></stm>
   </axiom>
-  <p>where <aval>arr[x]</aval> resolves to <listval><syntax>arr</syntax><aval>x</aval></listval>, which in turn could resolve to "<syntax>arr;</syntax>" concatenated with the string representation of <aval>x</aval>.</p>
+  <p>where <aval>arr[x]</aval> resolves to <listval><syntax>arr</syntax><aval>x</aval></listval>. This in turn could, for example, resolve to <aval><text>“</text>arr;<text>” concatenated with str(<aval>x</aval>)</text></aval>, where str is the string representation of a number, but such a definition is not needed for this exercise.</p>
 
   <h3>Example</h3>
 

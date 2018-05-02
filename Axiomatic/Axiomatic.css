@@ -8,6 +8,10 @@ axiom {
     margin: 1em 10px;
     font-size: 1rem;
 }
+text {
+    font: initial;
+    color: initial;
+}
 axiom axiom {
     margin: 0 10px;
 }
