@@ -1,164 +1,157 @@
-axiomatic {
-    margin: 1em;
-}
-
+@charset "UTF-8";
 axiom {
-    display: inline-block;
-    text-align: center;
-    margin: 1em 10px;
-    font-size: 1rem;
-}
+  display: inline-block;
+  text-align: center;
+  margin: 1em 10px;
+  font-size: 1rem; }
+  axiom axiom {
+    margin: 0 10px; }
+
 text {
-    font: initial;
-    color: initial;
-}
-axiom axiom {
-    margin: 0 10px;
-}
+  font: initial;
+  color: initial;
+  display: inline; }
+
 and::before {
-    content: '∧';
-    font-style: normal;
-}
+  content: '∧';
+  font-style: normal; }
+
 or::before {
-    content: '∨';
-    font-style: normal;
-}
+  content: '∨';
+  font-style: normal; }
+
 syntax, aval {
-    font-family: 'Fira Code', monospace;
-    font-style: normal;
-    color: green;
-}
+  font-family: 'Fira Code', monospace;
+  font-style: normal;
+  color: green; }
+
 aval::before {
-    font-family: serif;
-    color: black;
-    content: "𝒜 ⟦";
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: "𝒜 ⟦"; }
+
 aval::after {
-    font-family: serif;
-    color: black;
-    content: "⟧";
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: "⟧"; }
+
 listval::before {
-    font-family: serif;
-    font-style: normal;
-    color: black;
-    content: "ℒ ⟦";
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: "ℒ ⟦"; }
+
 listval::after {
-    font-family: serif;
-    font-style: normal;
-    color: black;
-    content: "⟧";
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: "⟧"; }
+
 listval > :not(:last-child)::after {
-    font-family: serif;
-    color: black;
-    content: ', ';
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: ', '; }
+
 update {
-    font-family: serif;
-    font-style: italic;
-    font-size: 0.9em;
-    color: black;
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  font-style: italic;
+  font-size: 0.9em; }
+
 update::before {
-    content: ' [';
-    font-style: normal;
-      font-size: 1.1em;
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: ' [';
+  font-size: 1.1em; }
+
 update::after {
-    content: ']';
-    font-style: normal;
-    font-size: 1.1em;
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: ']';
+  font-size: 1.1em; }
+
 update > :first-child::after {
-    content: ' ↦ ';
-    color: black;
-}
+  content: ' ↦ ';
+  color: black; }
+
 update > listval:first-child::after {
-    font-family: serif;
-    font-style: normal;
-    color: black;
-    content: '⟧ ↦ ';
-}
-given {
-    display: block;
-    font-family: 'Fira Code', monospace;
-    padding: 5px;
-    color: green;
-}
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  content: '⟧ ↦ '; }
+
+given, stm {
+  font-family: 'Fira Code', monospace;
+  font-style: normal;
+  color: green;
+  display: block;
+  padding: 5px; }
+
 stm {
-    display: block;
-    font-family: 'Fira Code', monospace;
-    border-top: 1px solid black;
-    padding: 5px;
-    color: green;
-    position: relative;
-    padding-right: 2em;
-}
+  border-top: 1px solid black;
+  position: relative;
+  padding-right: 2em; }
+
 rule {
-    position: absolute;
-    right: 0;
-    top: 0.1em;
-    color: black;
-    font-family: monospace;
-    font-size: 0.8em;
-}
-[color="red"] {
-    color: red;
-}
-cond {
-    display: inline;
-    font-family: serif;
-    font-style: italic;
-    color: black;
-}
+  position: absolute;
+  right: 0;
+  top: 0.1em;
+  color: black;
+  font-family: monospace;
+  font-size: 0.8em; }
+
 ternary {
-    display: inline-table;
-    position: relative;
-    padding: 0 1em;
-    font-size: 0.8em;
-    vertical-align: middle;
-}
-ternary > * {
-    display: table-row;
-}
-ternary > * > * {
-    display: table-cell;
-}
-ternary > * > *:first-child {
-    padding-right: 1em;
-}
-ternary::before {
+  display: inline-table;
+  position: relative;
+  padding: 0 1em;
+  font-size: 0.8em;
+  vertical-align: middle; }
+  ternary > * {
+    display: table-row; }
+    ternary > * > * {
+      display: table-cell; }
+      ternary > * > *:first-child {
+        padding-right: 1em; }
+  ternary::before {
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     content: '{';
     font-size: 2em;
-    font-style: normal;
-}
-ternary::after {
+    font-style: normal; }
+  ternary::after {
     display: block;
     position: absolute;
     top: 0;
     right: 0;
     content: '}';
     font-size: 2em;
+    font-style: normal; }
+
+cond {
+  font-family: serif;
+  color: black;
+  font-style: normal;
+  font-style: italic;
+  display: inline; }
+  cond::before {
+    font-family: serif;
+    color: black;
     font-style: normal;
-}
-cond::before {
     content: ' {';
-      font-size: 1.2em;
+    font-size: 1.2em; }
+  cond::after {
+    font-family: serif;
+    color: black;
     font-style: normal;
-}
-cond::after {
     content: '} ';
-      font-size: 1.2em;
-    font-style: normal;
-}
-code {
-    white-space: pre;
-    font-family: monospace;
-    display: block;
-}
+    font-size: 1.2em; }
+
+/*# sourceMappingURL=Axiomatic.css.map */
