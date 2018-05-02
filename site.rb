@@ -26,8 +26,7 @@ def listing(folder=".", &block)
           %a{href: relative_url(item['url'])}= item['name']
           —
           = item['desc']
-      - unless block.nil?
-        - capture_haml(block)
+      = capture_haml(&block) if block
   HAML
-  Haml::Engine.new(haml).to_html context, items: items
+  Haml::Engine.new(haml).to_html context, items: items, block: block
 end

@@ -12,9 +12,9 @@ class Page
     @content = Haml::Engine.new(haml).to_html(self)
   end
 
-  def content_for(region, &blk)
+  def content_for region
     @overwritten_regions << region if @regions.key? region
-    @regions[region] = blk
+    @regions[region] = capture_haml { yield }
     @unused_regions << region
   end
 
@@ -41,8 +41,12 @@ class Page
 
   def to_html(template)
     begin
-      html = template.to_html self do |region, *args|
-        self[region] ? capture_haml { self[region][*args] } : @caption
+      html = template.to_html self do |region|
+        if region.nil?
+          @content
+        else
+          self[region] ? capture_haml { self[region] } : nil
+        end
       end
     rescue NameError => e
       raise e
