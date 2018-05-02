@@ -13,9 +13,11 @@ axiom axiom {
 }
 and::before {
     content: '∧';
+    font-style: normal;
 }
 or::before {
     content: '∨';
+    font-style: normal;
 }
 syntax, aval {
     font-family: 'Fira Code', monospace;
