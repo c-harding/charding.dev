@@ -9,9 +9,9 @@
 		= yield :head
 	%body
 		%article
-			= yield
-			
 			#navbar
 				%a{link_to("/")} Home
 				%a{link_to("/projects/")} Projects
 				%a{link_to("/designs/")} Designs
+
+			= yield

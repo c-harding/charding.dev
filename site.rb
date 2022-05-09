@@ -2,14 +2,14 @@ require 'yaml'
 require 'haml'
 require 'uri'
 
-def listing(folder=".", &block)
-  folder << "/" unless folder.end_with? "/"
-
-  abs_folder = if folder.start_with? "/"
-    File.join(File.dirname(__FILE__), 'src', folder)
+def listing(link=nil, &block)
+  src_folder = File.join(File.dirname(__FILE__), 'src')
+  if link&.start_with? "/"
+    folder = File.join(src_folder, link)
   else
-    dir = File.directory?(path) ? path : File.dirname(path)
-    dir.sub(/\/$/, '') + '/' + folder
+    base_path = File.join(src_folder, path)
+    base_path = File.dirname(base_path) unless File.directory?(base_path)
+    folder = File.join(base_path, link || '')
   end
 
   context = Object.new
@@ -17,8 +17,14 @@ def listing(folder=".", &block)
     URI(url).relative? ? "#{folder}#{url}" : url
   end
 
-  folder << "/" unless folder.end_with? "/"
-  items = YAML.load_file("#{abs_folder}listing.yml")
+  items = YAML.load_file(File.join(folder, "listing.yml"))
+  link = nil if Dir.glob(File.join(folder, "index.html.*")).empty?
+  if link.nil?
+    filtered_items = items
+  else
+    filtered_items = items.filter {|item| item['homepage']}
+    link = nil unless filtered_items.size < items.size
+  end
   haml = <<~HAML
     %ul.listing
       - items.each do |item|
@@ -26,7 +32,9 @@ def listing(folder=".", &block)
           %a{href: relative_url(item['url'])}= item['name']
           —
           = item['desc']
-      = capture_haml(&block) if block
+      - if link
+        %li
+          %a{href: link} See all…
   HAML
-  Haml::Engine.new(haml).to_html context, items: items, block: block
+  Haml::Engine.new(haml).to_html context, items: filtered_items, link: link
 end

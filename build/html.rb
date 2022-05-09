@@ -25,7 +25,7 @@ class Page
   end
 
   def path
-    @output.sub(/(^|\/)index\.html$/, '\1')
+    @output.sub(/^src\//, '').sub(/(^|\/)index\.html$/, '\1')
   end
 
   def parent
@@ -121,7 +121,7 @@ end
 
 def files(&block)
   if ARGV.empty?
-    Dir.glob 'src/**/*.html.*' do |path|
+    Dir.glob '**/*.html.*' do |path|
       block[path]
     end
   else
