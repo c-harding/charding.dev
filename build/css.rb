@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'sassc'
 
-require_relative 'write_if_changed.rb'
+require_relative 'write_if_changed'
+require_relative 'glob_without_vendor'
 
 processed = []
 
@@ -27,7 +28,7 @@ end
 
 def files(&block)
   if ARGV.empty?
-    Dir.glob '**/*.css.*' do |path|
+    glob '**/*.css.*' do |path|
       block[path]
     end
   else

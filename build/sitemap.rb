@@ -3,7 +3,8 @@
 require 'date'
 require 'shellwords'
 
-require_relative 'write_if_changed.rb'
+require_relative 'write_if_changed'
+require_relative 'glob_without_vendor'
 
 class Entry
   def initialize(path, time)
@@ -49,9 +50,8 @@ end
 
 urlset = []
 
-(Dir['**/*.haml'] + Dir['**/*.html']).each do |input|
-  next if input.match? "template.haml"
-  path = fqdn + input.sub(/(^|\/)index\.haml$/,'').sub(/\.haml$/,'.html')
+glob '**/*.html{,.*}' do |input|
+  path = fqdn + File.join(File.dirname(input), File.basename(input).sub(/(?<=\.html)\..+$/, ''))
   next if urlset.any? {|x| path == x.path }
   date = `git log -1 --format=%cI #{input.shellescape}`.strip
   urlset << Entry.new(path, date)

@@ -2,7 +2,8 @@
 require 'haml'
 
 require_relative '../site.rb'
-require_relative 'write_if_changed.rb'
+require_relative 'write_if_changed'
+require_relative 'glob_without_vendor'
 
 class Page
   def initialize(haml, output)
@@ -121,7 +122,7 @@ end
 
 def files(&block)
   if ARGV.empty?
-    Dir.glob '**/*.html.*' do |path|
+    glob '**/*.html.*' do |path|
       block[path]
     end
   else
