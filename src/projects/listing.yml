@@ -2,9 +2,13 @@
   url: https://heatmapper.charding.dev/
   desc: a tool for viewing all recorded Strava activities in a heatmap, with options for filtering activities. This uses Mapbox and the Strava API.
   homepage: true
+- name: Hiking with Charlie
+  url: https://hiking.charding.dev/all
+  desc: a quick view of all hikes I am organising/have organised through Hiking Buddies. Originally created in order to provide short links with improved link previews for social media.
+  homepage: true
 - name: UBES Walks
   url: https://walks.ubes.co.uk/
-  desc: an resource for members of the University of Bristol Expeditions Society to find accessible local walks during the corona lockdowns of 2020-21.
+  desc: a resource for members of the University of Bristol Expeditions Society to find accessible local walks during the corona lockdowns of 2020-21.
   homepage: true
 - name: AirGestures
   url: https://teamlimoncello.github.io/ICHack18/
