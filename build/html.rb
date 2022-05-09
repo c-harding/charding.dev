@@ -2,6 +2,7 @@
 require 'haml'
 
 require_relative '../site.rb'
+require_relative 'write_if_changed.rb'
 
 class Page
   def initialize(haml, output)
@@ -77,26 +78,14 @@ class HamlParser
   def parse(input, output)
     begin
       page = Page.new(File.read(input), output).to_html(@template)
-      
-      File.open(output, 'w') {|f| f.write page}
-  
-      puts "File '#{output}' written successfully"
+
+      write_if_changed(output, page, log: true)
     rescue => error
       STDERR.puts "Cannot process #{input}"
-  
+
       STDERR.puts error.backtrace if ENV["DEBUG"]
-  
-      if error.to_s.match? /To use the "maruku" filter/
-        STDERR.puts <<~ERROR
-          To use the Maruku filter, you need to install the haml-contrib and maruku gems:
-          
-            gem install haml-contrib maruku
-          
-        ERROR
-        exit 1
-      else
-        STDERR.puts $!
-      end
+
+      STDERR.puts $!
     end
   end
 end
@@ -110,7 +99,7 @@ def build_redirect(input, output)
         <title>#{title}</title>
     </head><body></body></html>
   HTML
-  File.write(output, html)
+  write_if_changed(output, html, log: true)
 end
 
 HamlParser.new "template.haml"

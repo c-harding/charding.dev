@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
+require 'sassc'
+
+require_relative 'write_if_changed.rb'
 
 processed = []
 
 def parse_sass(input, output)
-  result = system('sass', input, output)
-  raise result unless $?.to_i == 0
-  raise "When compiled the module should output some CSS" unless File.exists?(output)
-  puts "Built CSS to #{output}"
+  sass = File.read(input)
+  css = SassC::Engine.new(sass, style: :compressed).render
+
+  write_if_changed(output, css, log: true)
 end
 
 def parse(input)

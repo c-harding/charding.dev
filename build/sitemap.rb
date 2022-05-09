@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'date'
-require 'shellwords'
+
+require_relative 'write_if_changed.rb'
 
 class Entry
   def initialize(path, time)
@@ -36,7 +37,7 @@ end
 
 fqdn = ARGV[0]
 
-fqdn = "https://#{File.read('CNAME').strip}/"
+fqdn ||= "https://#{File.read('CNAME').strip}/"
 
 unless fqdn
   STDERR.puts 'Please provide the path to your site as an argument, such as '+
@@ -55,4 +56,6 @@ urlset = []
   urlset << Entry.new(path, date)
 end
 
-File.write 'sitemap.xml', to_xml(urlset)
+sitemap_path = 'sitemap.xml'
+
+write_if_changed(sitemap_path, to_xml(urlset), log: true)

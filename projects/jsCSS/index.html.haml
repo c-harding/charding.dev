@@ -3,27 +3,27 @@
 - content_for :head do
 	%script{src: "jsCSS.min.js"}
 
-:maruku
+:markdown
 	# jsCSS
-	
+
 	Create a new CSS tag with <code><span class="var">yourName</span> <span class="maths">= new</span> <span class="function">jsCSS</span>();</code>. <code><span class="var">yourName</span></code> can be any variable name you like. You can create as many <code><span class="maths">new</span> <span class="function">jsCSS</span>()</code>s as you need, and the ones you make last will take priority. To include this file, simply add the following to your page's <code><span class="rule">&lt;head&gt;</span></code> tag:
 
 %pre
 	:preserve
 		<span class="rule">&lt;script</span> <span class="selector">src=</span><span class="string">"jsCSS.min.js"</span><span class="rule">&gt;&lt;/script&gt;</span>
 
-:maruku
+:markdown
 	Add rules with <code><span class="var">yourName</span>.<span class="function">addRule</span>(<span class="var">selector</span>,<span class="var">rules</span>)</code>, where <code><span class="var">selector</span></code> is a text string, a normal CSS selector. <code><span class="var">rules</span></code> is an object containing all the rules you would like to apply as <code>{<span class="string">"key"</span>: <span class="string">"value"</span>}</code> pairs.
-	
+
 	Delete rules with <code><span class="var">yourName</span>.<span class="function">deleteRule</span>(<span class="var">selector</span>,<span class="var">rules</span>)</code>, where <code><span class="var">selector</span></code> is a text string, a normal CSS selector. <code><span class="var">rules</span></code> is an Array containing all the rules you would like to delete as strings.
-	
+
 	My name's Xsanda, and I'd love it if you were to mention it if you use this tool!
-	
+
 	### Download
-	
+
 	* [Minified version](jsCSS.min.js)
 	* [Expanded version (for developers)](jsCSS.js)
-	
+
 	### Example
 
 %pre
