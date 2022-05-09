@@ -1,6 +1,8 @@
 - name: Asian Highway Network Map
   url:  ah/
   desc: a transit-style map of the Asian Highway Network, inspired by Cameron Booth’s E-Road map. January 2017
+  homepage: true
 - name: Great Western Railway Network Map
   url:  gwr/
   desc: a redesign of the newly rebranded Great Western Railway Network Map. Summer 2016
+  homepage: true
