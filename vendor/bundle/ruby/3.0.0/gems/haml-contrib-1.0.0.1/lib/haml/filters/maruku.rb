@@ -1,1 +1,0 @@
-Haml::Filters.register_tilt_filter "Maruku", :template_class => Tilt::MarukuTemplate
