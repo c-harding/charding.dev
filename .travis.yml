@@ -3,7 +3,7 @@ script:
 
 language: ruby
 before_install:
-  - gem install sass haml haml-contrib maruku
+  - bundle install
 
 deploy:
   provider: pages
