@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
 
-puts %x(
-  build/css.rb &&
-  build/html.rb
-)
+system('build/css.rb', exception: true)
+system('build/html.rb', exception: true)
