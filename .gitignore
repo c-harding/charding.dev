@@ -1,6 +1,6 @@
 dungeon_scores.json
 .sass-cache
-*.html
-*.css
-*.css.map
-sitemap.xml
+/src/**/*.html
+/src/**/*.css
+/src/**/*.css.map
+/src/sitemap.xml

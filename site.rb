@@ -4,9 +4,9 @@ require 'uri'
 
 def listing(folder=".", &block)
   folder << "/" unless folder.end_with? "/"
-  
+
   abs_folder = if folder.start_with? "/"
-    File.dirname(__FILE__).sub(/\/$/, '') + folder
+    File.join(File.dirname(__FILE__), 'src', folder)
   else
     dir = File.directory?(path) ? path : File.dirname(path)
     dir.sub(/\/$/, '') + '/' + folder

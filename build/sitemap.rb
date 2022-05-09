@@ -3,7 +3,7 @@
 require 'date'
 require 'shellwords'
 
-require_relative 'write_if_changed.rb'
+require_relative 'write_if_changed'
 
 class Entry
   def initialize(path, time)
@@ -36,9 +36,16 @@ def to_xml entries
   XML
 end
 
+def strip_suffixes(filename)
+  File.join(File.dirname(filename), File.basename(filename).sub(/(?<=\.html)\..+$/, ''))
+end
+
 fqdn = ARGV[0]
 
-fqdn ||= "https://#{File.read('CNAME').strip}/"
+begin
+  fqdn ||= "https://#{File.read('src/CNAME').strip}/"
+rescue Error::ENOENT
+end
 
 unless fqdn
   STDERR.puts 'Please provide the path to your site as an argument, such as '+
@@ -49,9 +56,8 @@ end
 
 urlset = []
 
-(Dir['**/*.haml'] + Dir['**/*.html']).each do |input|
-  next if input.match? "template.haml"
-  path = fqdn + input.sub(/(^|\/)index\.haml$/,'').sub(/\.haml$/,'.html')
+Dir.glob 'src/**/*.html{,.*}' do |input|
+  path = fqdn + strip_suffixes(input)
   next if urlset.any? {|x| path == x.path }
   date = `git log -1 --format=%cI #{input.shellescape}`.strip
   urlset << Entry.new(path, date)

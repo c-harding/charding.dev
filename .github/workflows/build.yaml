@@ -16,9 +16,9 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Build
         run: |
-          build/deploy.rb
+          bundle exec build/deploy.rb
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages
-          folder: .
+          folder: src
