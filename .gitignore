@@ -1,2 +1,4 @@
 dungeon_scores.json
 .sass-cache
+*.html.*
+*.css.*
