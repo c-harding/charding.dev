@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'date'
+require 'shellwords'
 
 require_relative 'write_if_changed.rb'
 
