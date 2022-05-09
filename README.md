@@ -1,4 +1,4 @@
-# [Charding.dev](https://charding.dev/)
+# [charding.dev](https://charding.dev/)
 
 This is my personal website, hosted on GitHub Pages.
 It uses a home-made static site generator, written in Ruby.
