@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta content='HQ99lrPlfaq65SFxTcEW1DeHq3EHqHi5OA-tVpelkAA' name='google-site-verification'>
+<title>Demo of jsCSS
+</title>
+<link href='/style.css' rel='stylesheet' type='text/css'>
+<meta content='width=device-width, initial-scale=1, target-densityDpi=device-dpi' name='viewport'>
+<script src='jsCSS.min.js'></script>
+
+</head>
+<body>
+<article>
+<h1 id="jscss">jsCSS</h1>
+
+<p>Create a new CSS tag with <code><span class="var">yourName</span> <span class="maths">= new</span> <span class="function">jsCSS</span>();</code>. <code><span class="var">yourName</span></code> can be any variable name you like. You can create as many <code><span class="maths">new</span> <span class="function">jsCSS</span>()</code>s as you need, and the ones you make last will take priority. To include this file, simply add the following to your page's <code><span class="rule">&lt;head&gt;</span></code> tag:</p>
+<pre><span class="rule">&lt;script</span> <span class="selector">src=</span><span class="string">"jsCSS.min.js"</span><span class="rule">&gt;&lt;/script&gt;</span>&#x000A;</pre>
+<p>Add rules with <code><span class="var">yourName</span>.<span class="function">addRule</span>(<span class="var">selector</span>,<span class="var">rules</span>)</code>, where <code><span class="var">selector</span></code> is a text string, a normal CSS selector. <code><span class="var">rules</span></code> is an object containing all the rules you would like to apply as <code>{<span class="string">"key"</span>: <span class="string">"value"</span>}</code> pairs.</p>
+
+<p>Delete rules with <code><span class="var">yourName</span>.<span class="function">deleteRule</span>(<span class="var">selector</span>,<span class="var">rules</span>)</code>, where <code><span class="var">selector</span></code> is a text string, a normal CSS selector. <code><span class="var">rules</span></code> is an Array containing all the rules you would like to delete as strings.</p>
+
+<p>My name's Xsanda, and I'd love it if you were to mention it if you use this tool!</p>
+
+<h3 id="download">Download</h3>
+
+<ul>
+  <li><a href="jsCSS.min.js">Minified version</a></li>
+  <li><a href="jsCSS.js">Expanded version (for developers)</a></li>
+</ul>
+
+<h3 id="example">Example</h3>
+<pre><span class="maths">var</span> <span class="var">css</span> <span class="maths">= new</span> <span class="function">jsCSS</span>()&#x000A;<span class="var">css</span>.<span class="function">addRule</span>(<span class="string">"p, a"</span>,{&#x000A;	<span class="string">"font-family"</span>: <span class="string">"'Segoe UI', Helvetica, Calibri, sans-serif"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"code, pre"</span>,{&#x000A;	<span class="string">"font-family"</span>: <span class="string">"'Ubuntu Mono', Monaco, monospace"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"h1, h3"</span>,{&#x000A;	<span class="string">"font-family"</span>: <span class="string">"'Segoe UI', Helvetica, Calibri, sans-serif"</span>,&#x000A;	<span class="string">"text-decoration"</span>: <span class="string">"underline"</span>&#x000A;})&#x000A;&#x000A;<span class="maths">var</span> <span class="var">colouring</span> <span class="maths">= new</span> <span class="function">jsCSS</span>()&#x000A;<span class="var">colouring</span>.<span class="function">addRule</span>(<span class="string">"span.string"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"red"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"span.maths"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"blue"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"span.var"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"purple"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"span.function"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"teal"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"span.selector"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"maroon"</span>&#x000A;}).<span class="function">addRule</span>(<span class="string">"span.rule"</span>,{&#x000A;	<span class="string">"color"</span>: <span class="string">"fuchsia"</span>&#x000A;})&#x000A;</pre>
+<script>
+  var css = new jsCSS();
+  css.addRule("p,a",{
+  	"font-family": "'Segoe UI', Helvetica, Calibri, sans-serif"
+  }).addRule("code,pre",{
+  	"font-family": "'Ubuntu Mono', Monaco, monospace"
+  }).addRule("h1,h3",{
+  	"font-family": "'Segoe UI', Helvetica, Calibri, sans-serif",
+  	"text-decoration": "underline"
+  })
+  var colouring = new jsCSS();
+  colouring.addRule("span.string",{
+  	"color": "red"
+  }).addRule("span.maths",{
+  	"color": "blue"
+  }).addRule("span.var",{
+  	"color": "purple"
+  }).addRule("span.function",{
+  	"color": "teal"
+  }).addRule("span.selector",{
+  	"color": "maroon"
+  }).addRule("span.rule",{
+  	"color": "fuchsia"
+  })
+</script>
+
+<div id='navbar'>
+<a href='/'>Home</a>
+<a class='this' href='/projects/'>Projects</a>
+<a href='/designs/'>Designs</a>
+</div>
+</article>
+</body>
+</html>
