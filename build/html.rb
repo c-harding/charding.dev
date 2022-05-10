@@ -82,10 +82,9 @@ class HamlParser
       write_if_changed(output, page, log: true)
     rescue => error
       STDERR.puts "Cannot process #{input}"
-
-      STDERR.puts error.backtrace if ENV["DEBUG"]
-
       STDERR.puts $!
+      STDERR.puts error.backtrace if ENV["DEBUG"]
+      STDERR.puts
     end
   end
 end
