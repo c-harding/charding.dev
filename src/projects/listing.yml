@@ -1,6 +1,6 @@
-- name: Strava Heatmapper
-  url: https://heatmapper.charding.dev/
-  desc: a tool for viewing all recorded Strava activities in a heatmap, with options for filtering activities. This uses Mapbox and the Strava API.
+- name: Activity Map
+  url: https://activity-map.charding.dev/
+  desc: powered by Strava, a tool for viewing all recorded Strava activities and planned routes on one map, with options for filtering activities. This uses Mapbox and the Strava API.
   homepage: true
 - name: Hiking with Charlie
   url: https://hiking.charding.dev/all
