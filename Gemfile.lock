@@ -9,11 +9,9 @@ GEM
       haml (>= 3.2.0.alpha.13)
     kramdown (2.4.0)
       rexml
-    rexml (3.3.3)
-      strscan
+    rexml (3.3.9)
     sassc (2.4.0)
       ffi (~> 1.9)
-    strscan (3.1.0)
     temple (0.8.2)
     tilt (2.0.10)
 
